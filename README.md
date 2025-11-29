@@ -33,4 +33,4 @@ ExploreKosova është një webfaqe moderne dhe minimaliste e ndërtuar si projek
 - /assets/js/main.js
 
 ## Autori
-Projekti është zhvilluar nga studentët Erik,Meris,Yasin si pjesë e dorëzimit për fazën e parë të projektit.
+Projekti është zhvilluar nga studentët Erik Salihu, Meris Misini, Jasin Krasniqi si pjesë e dorëzimit për fazën e parë të projektit.
