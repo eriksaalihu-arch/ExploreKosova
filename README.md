@@ -22,15 +22,15 @@ ExploreKosova është një webfaqe moderne dhe minimaliste e ndërtuar si projek
 - Navigim i thjeshtë dhe i qartë
 
 ## Struktura
-/index.html
-/about.html
-/services.html
-/service-details.html
-/contact.html
-/login.html
-/register.html
-/assets/css/style.css
-/assets/js/main.js
+- /index.html
+- /about.html
+- /services.html
+- /service-details.html
+- /contact.html
+- /login.html
+- /register.html
+- /assets/css/style.css
+- /assets/js/main.js
 
 ## Autori
 Projekti është zhvilluar nga studentët Erik,Meris,Yasin si pjesë e dorëzimit për fazën e parë të projektit.
