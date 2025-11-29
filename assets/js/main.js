@@ -25,3 +25,22 @@ if(contactForm){
         }
     });
 }
+
+const loginForm = document.getElementById("loginForm");
+
+if(loginForm){
+    loginForm.addEventListener("submit", function(e){
+        
+        const email = document.getElementById("loginEmail").value.trim();
+        const pass = document.getElementById("loginPassword").value.trim();
+
+        if(!isValidEmail(email)){
+            alert("Email nuk është valid.");
+            e.preventDefault();
+        }
+        else if(pass.length < 6){
+            alert("Fjalëkalimi duhet të ketë të paktën 6 karaktere.");
+            e.preventDefault();
+        }
+    });
+}
