@@ -1,138 +1,125 @@
 /* ===================== UTILITIES ===================== */
-
 function isValidEmail(email) {
-    const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return pattern.test(email);
+    return email.includes("@") && email.includes(".") && email.length > 5;
 }
 
 function setError(input, message) {
-    const msgEl = input.nextElementSibling;
-    msgEl.textContent = message;
+    const group = input.closest("div");
+    const msgEl = group ? group.querySelector(".error-msg") : null;
+
     input.classList.add("input-error");
+    if (msgEl) msgEl.textContent = message;
 }
 
 function clearError(input) {
-    const msgEl = input.nextElementSibling;
-    msgEl.textContent = "";
+    const group = input.closest("div");
+    const msgEl = group ? group.querySelector(".error-msg") : null;
+
     input.classList.remove("input-error");
+    if (msgEl) msgEl.textContent = "";
 }
 
 /* ===================== CONTACT FORM ===================== */
-
 const contactForm = document.getElementById("contactForm");
 
 if (contactForm) {
     contactForm.addEventListener("submit", function (e) {
+        const name = document.getElementById("contactName");
+        const email = document.getElementById("contactEmail");
+        const msg = document.getElementById("contactMessage");
+        const successEl = document.getElementById("contactSuccess");
 
-        let valid = true;
-
-        const name = contactName;
-        const email = contactEmail;
-        const msg = contactMessage;
-
-        clearError(name);
-        clearError(email);
-        clearError(msg);
+        let isValid = true;
+        [name, email, msg].forEach(clearError);
 
         if (name.value.trim().length < 3) {
             setError(name, "Emri duhet të ketë të paktën 3 karaktere.");
-            valid = false;
+            isValid = false;
         }
-
         if (!isValidEmail(email.value.trim())) {
-            setError(email, "Ju lutem vendosni një email valid.");
-            valid = false;
+            setError(email, "Ju lutem shkruani një email valid.");
+            isValid = false;
         }
-
         if (msg.value.trim().length < 10) {
             setError(msg, "Mesazhi duhet të ketë të paktën 10 karaktere.");
-            valid = false;
+            isValid = false;
         }
 
-        if (!valid) {
+        if (!isValid) {
             e.preventDefault();
-        } else {
-            e.preventDefault(); 
-            contactForm.innerHTML = `<p class="success-msg">Mesazhi u dërgua me sukses! ✔</p>`;
+        } else if (successEl) {
+            e.preventDefault();
+            successEl.textContent = "Mesazhi u dërgua me sukses (simulim).";
+            contactForm.reset();
         }
     });
 }
 
 /* ===================== LOGIN FORM ===================== */
-
 const loginForm = document.getElementById("loginForm");
 
 if (loginForm) {
     loginForm.addEventListener("submit", function (e) {
+        const email = document.getElementById("loginEmail");
+        const pass = document.getElementById("loginPassword");
 
-        let valid = true;
-
-        const email = loginEmail;
-        const pass = loginPassword;
-
-        clearError(email);
-        clearError(pass);
+        let isValid = true;
+        [email, pass].forEach(clearError);
 
         if (!isValidEmail(email.value.trim())) {
             setError(email, "Email nuk është valid.");
-            valid = false;
+            isValid = false;
         }
-
         if (pass.value.trim().length < 6) {
             setError(pass, "Fjalëkalimi duhet të ketë të paktën 6 karaktere.");
-            valid = false;
+            isValid = false;
         }
 
-        if (!valid) {
+        if (!isValid) {
             e.preventDefault();
+        } else {
+            e.preventDefault();
+            alert("Login simulues i suksesshëm!");
         }
     });
 }
 
 /* ===================== REGISTER FORM ===================== */
-
 const registerForm = document.getElementById("registerForm");
 
 if (registerForm) {
     registerForm.addEventListener("submit", function (e) {
+        const name = document.getElementById("regName");
+        const email = document.getElementById("regEmail");
+        const pass = document.getElementById("regPassword");
+        const confirm = document.getElementById("regConfirm");
 
-        let valid = true;
-
-        const name = regName;
-        const email = regEmail;
-        const pass = regPassword;
-        const confirm = regConfirm;
-
-        clearError(name);
-        clearError(email);
-        clearError(pass);
-        clearError(confirm);
+        let isValid = true;
+        [name, email, pass, confirm].forEach(clearError);
 
         if (name.value.trim().length < 3) {
             setError(name, "Emri duhet të ketë të paktën 3 karaktere.");
-            valid = false;
+            isValid = false;
         }
-
         if (!isValidEmail(email.value.trim())) {
             setError(email, "Ju lutem shkruani një email valid.");
-            valid = false;
+            isValid = false;
         }
-
         if (pass.value.trim().length < 6) {
             setError(pass, "Fjalëkalimi duhet të ketë të paktën 6 karaktere.");
-            valid = false;
+            isValid = false;
         }
-
         if (pass.value.trim() !== confirm.value.trim()) {
             setError(confirm, "Fjalëkalimet nuk përputhen.");
-            valid = false;
+            isValid = false;
         }
 
-        if (!valid) {
+        if (!isValid) {
             e.preventDefault();
         } else {
             e.preventDefault();
-            registerForm.innerHTML = `<p class="success-msg">Regjistrimi u krye me sukses! ✔</p>`;
+            alert("Regjistrimi u krye me sukses (simulim)!");
+            registerForm.reset();
         }
     });
 }
