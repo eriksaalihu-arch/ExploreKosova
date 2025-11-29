@@ -62,3 +62,8 @@
     font-size: 14px;
     color: #555;
 }
+
+.nav-links a.active{
+    border-bottom: 2px solid #ffc107;
+    padding-bottom: 3px;
+}
