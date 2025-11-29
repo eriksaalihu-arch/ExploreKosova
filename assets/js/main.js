@@ -44,3 +44,32 @@ if(loginForm){
         }
     });
 }
+
+const registerForm = document.getElementById("registerForm");
+
+if(registerForm){
+    registerForm.addEventListener("submit", function(e){
+
+        const name = document.getElementById("regName").value.trim();
+        const email = document.getElementById("regEmail").value.trim();
+        const pass = document.getElementById("regPassword").value.trim();
+        const confirm = document.getElementById("regConfirm").value.trim();
+
+        if(name.length < 3){
+            alert("Emri duhet të ketë të paktën 3 karaktere.");
+            e.preventDefault();
+        }
+        else if(!isValidEmail(email)){
+            alert("Ju lutem shkruani një email valid.");
+            e.preventDefault();
+        }
+        else if(pass.length < 6){
+            alert("Fjalëkalimi duhet të ketë të paktën 6 karaktere.");
+            e.preventDefault();
+        }
+        else if(pass !== confirm){
+            alert("Fjalëkalimet nuk përputhen.");
+            e.preventDefault();
+        }
+    });
+}
