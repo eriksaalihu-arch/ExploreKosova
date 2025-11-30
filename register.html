@@ -20,34 +20,50 @@
     </nav>
 </header>
 
-    <main class="page">
+<main class="page form-page">
+
     <section class="page-header">
-    <h1>Regjistrohu</h1>
-    <p>Krijo llogarinë tënde.</p>
+        <h1>Regjistrohu</h1>
+        <p>Krijo llogarinë tënde.</p>
     </section>
 
     <form id="registerForm" class="form-card">
-    <label for="regName">Emri</label>
-    <input type="text" id="regName" required>
 
-    <label for="regEmail">Email</label>
-    <input type="email" id="regEmail" required>
+        <div>
+            <label for="regName">Emri</label>
+            <input type="text" id="regName" placeholder="Shkruaj emrin tënd">
+            <div class="error-msg"></div>
+        </div>
 
-    <label for="regPassword">Fjalëkalimi</label>
-    <input type="password" id="regPassword" required>
+        <div>
+            <label for="regEmail">Email</label>
+            <input type="email" id="regEmail" placeholder="Shkruaj emailin tënd">
+            <div class="error-msg"></div>
+        </div>
 
-    <label for="regConfirm">Konfirmo fjalëkalimin</label>
-    <input type="password" id="regConfirm" required>
+        <div>
+            <label for="regPassword">Fjalëkalimi</label>
+            <input type="password" id="regPassword" placeholder="Zgjidh një fjalëkalim">
+            <div class="error-msg"></div>
+        </div>
 
-    <button type="submit" class="btn-primary">Regjistrohu</button>
+        <div>
+            <label for="regConfirm">Konfirmo fjalëkalimin</label>
+            <input type="password" id="regConfirm" placeholder="Shkruaj përsëri fjalëkalimin">
+            <div class="error-msg"></div>
+        </div>
+
+        <button type="submit" class="btn-primary">Regjistrohu</button>
+
+        <p>Ke tashmë llogari? <a href="login.html">Kyçu këtu</a></p>
     </form>
 
-    </main>
+</main>
 
-    <footer class="main-footer">
+<footer class="main-footer">
     <p>© 2025 ExploreKosova • Të gjitha të drejtat e rezervuara</p>
-    </footer>
+</footer>
 
-    <script src="assets/js/main.js"></script>
+<script src="assets/js/main.js"></script>
 </body>
 </html>
