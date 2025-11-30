@@ -15,33 +15,42 @@
             <li><a href="about.html">Rreth Nesh</a></li>
             <li><a href="services.html">Shërbimet</a></li>
             <li><a href="contact.html">Kontakt</a></li>
-            <li><a class="active" href="login.html" class="btn-nav">Login</a></li>
+            <li><a class="active btn-nav" href="login.html">Login</a></li>
         </ul>
     </nav>
 </header>
 
-    <main class="page">
+<main class="page form-page">
+
     <section class="page-header">
-    <h1>Login</h1>
-    <p>Kyçu për të vazhduar.</p>
+        <h1>Kyçu</h1>
+        <p>Shkruaj të dhënat për t'u qasur në llogari.</p>
     </section>
 
     <form id="loginForm" class="form-card">
-    <label for="loginEmail">Email</label>
-    <input type="email" id="loginEmail" required>
+        <div>
+            <label for="loginEmail">Email</label>
+            <input type="email" id="loginEmail" placeholder="Shkruaj emailin">
+            <div class="error-msg"></div>
+        </div>
 
-    <label for="loginPassword">Fjalëkalimi</label>
-    <input type="password" id="loginPassword" required>
+        <div>
+            <label for="loginPassword">Fjalëkalimi</label>
+            <input type="password" id="loginPassword" placeholder="Shkruaj fjalëkalimin">
+            <div class="error-msg"></div>
+        </div>
 
-    <button type="submit" class="btn-primary">Kyçu</button>
+        <button type="submit" class="btn-primary">Kyçu</button>
+
+        <p>Nuk ke llogari? <a href="register.html">Regjistrohu këtu</a></p>
     </form>
 
-    </main>
+</main>
 
-    <footer class="main-footer">
+<footer class="main-footer">
     <p>© 2025 ExploreKosova • Të gjitha të drejtat e rezervuara</p>
-    </footer>
+</footer>
 
-    <script src="assets/js/main.js"></script>
+<script src="assets/js/main.js"></script>
 </body>
 </html>
