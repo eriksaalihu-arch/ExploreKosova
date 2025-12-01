@@ -1,5 +1,5 @@
 # 🌍 ExploreKosova  
-Një webfaqe moderne, minimaliste dhe responsive, zhvilluar si projekt semestral në lëndën **Inxhinieri e Ueb-it**.  
+Një webfaqe moderne, minimaliste dhe responsive, zhvilluar si projekt semestral në lëndën **Dizajn dhe Zhvillim e Ueb-it**.  
 ExploreKosova shërben si platformë turistike që promovon Kosovën përmes tureve kulturore, aventurave natyrore dhe përvojave autentike.
 
 ---
