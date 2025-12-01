@@ -1,36 +1,82 @@
-# ExploreKosova
+# 🌍 ExploreKosova  
+Një webfaqe moderne, minimaliste dhe responsive, zhvilluar si projekt semestral në lëndën **Inxhinieri e Ueb-it**.  
+ExploreKosova shërben si platformë turistike që promovon Kosovën përmes tureve kulturore, aventurave natyrore dhe përvojave autentike.
 
-ExploreKosova është një webfaqe moderne dhe minimaliste e ndërtuar si projekt semestral për lëndën Inxhinieri e Ueb-it. Platforma paraqet një agjenci udhëtimesh që promovon turizmin në Kosovë përmes tureve, aventurave dhe përvojave autentike.
+---
 
-## Përmbajtja e projektit
-- Faqja kryesore (Ballina)
-- Rreth Nesh
-- Shërbimet
-- Faqja e detajeve të një shërbimi
-- Kontakt
-- Login / Register
+## 🚀 Përmbajtja e projektit
+Webfaqja përbëhet nga këto faqe kryesore:
 
-## Teknologjitë e përdorura
-- **HTML5**
-- **CSS3** (Flexbox, Responsive Design)
-- **JavaScript** (Validim i formave pa libra)
-- **Git & GitHub** për kontroll versioni
+- 🏠 **Ballina (index.html)**
+- ℹ️ **Rreth Nesh**
+- 🗺️ **Shërbimet**
+- 📄 **Faqja e detajeve të shërbimit**
+- ✉️ **Kontakt**
+- 🔐 **Login & Register**
 
-## Funksionalitetet
-- Validim JavaScript për formën e kontaktit, login dhe register
-- Dizajn modern, minimal dhe responsive
-- Navigim i thjeshtë dhe i qartë
+---
 
-## Struktura
-- /index.html
-- /about.html
-- /services.html
-- /service-details.html
-- /contact.html
-- /login.html
-- /register.html
-- /assets/css/style.css
-- /assets/js/main.js
+## 🛠 Teknologjitë e përdorura
 
-## Autori
-Projekti është zhvilluar nga studentët Erik Salihu, Meris Misini, Jasin Krasniqi si pjesë e dorëzimit për fazën e parë të projektit.
+- **HTML5**  
+- **CSS3** (Flexbox, Responsive Design, CSS Variables)  
+- **JavaScript Vanilla** (Validim formularësh pa biblioteka)  
+- **Git & GitHub** (kontroll versioni)  
+
+---
+
+## ⚙️ Funksionalitetet kryesore
+
+- ✔ Validim *JavaScript* për:
+  - formën e kontaktit  
+  - login  
+  - register  
+- ✔ Mesazhe gabimi të personalizuara (pa `alert()`)  
+- ✔ Dizajn modern, minimal dhe i optimizuar për mobile  
+- ✔ Navigim i thjeshtë dhe intuitiv  
+- ✔ Strukturë e pastër dhe e dokumentuar mirë  
+
+---
+
+## 📁 Struktura e projektit
+
+```
+ExploreKosova/
+│
+├── index.html
+├── about.html
+├── services.html
+├── service-details.html
+├── contact.html
+├── login.html
+├── register.html
+│
+├── assets/
+│   ├── css/
+│   │   └── style.css
+│   └── js/
+│       └── main.js
+
+```
+
+---
+
+## 👥 Autorët
+Projekti është zhvilluar nga:
+
+- **Erik Salihu**  
+- **Meris Misini**  
+- **Jasin Krasniqi**  
+
+si pjesë e dorëzimit për **Fazën I** të projektit të lëndës *Inxhinieri e Ueb-it*.
+
+---
+
+## 📌 Statusi i projektit
+Faza I — **Përfunduar**  
+(Frontend statik, validim formularësh, strukturë kryesore)
+
+---
+
+## 📄 Licenca
+Ky projekt është zhvilluar për qëllime akademike dhe edukative dhe nuk përmban licencë komerciale.
