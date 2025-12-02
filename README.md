@@ -67,9 +67,3 @@ Projekti është zhvilluar nga:
 - **Erik Salihu**  
 - **Meris Misini**  
 - **Jasin Krasniqi**  
-
----
-
-## 📌 Statusi i projektit
-Faza I — **Përfunduar**  
-(Frontend statik, validim formularësh, strukturë kryesore)
