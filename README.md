@@ -7,7 +7,7 @@ ExploreKosova shërben si platformë turistike që promovon Kosovën përmes tur
 ## 🚀 Përmbajtja e projektit
 Webfaqja përbëhet nga këto faqe kryesore:
 
-- 🏠 **Ballina (index.html)**
+- 🏠 **Ballina**
 - ℹ️ **Rreth Nesh**
 - 🗺️ **Shërbimet**
 - 📄 **Faqja e detajeve të shërbimit**
@@ -20,7 +20,7 @@ Webfaqja përbëhet nga këto faqe kryesore:
 
 - **HTML5**  
 - **CSS3** (Flexbox, Responsive Design, CSS Variables)  
-- **JavaScript Vanilla** (Validim formularësh pa biblioteka)  
+- **JavaScript Vanilla** (Validim formularësh pa librari)  
 - **Git & GitHub** (kontroll versioni)  
 
 ---
@@ -31,7 +31,7 @@ Webfaqja përbëhet nga këto faqe kryesore:
   - formën e kontaktit  
   - login  
   - register  
-- ✔ Mesazhe gabimi të personalizuara (pa `alert()`)  
+- ✔ Mesazhe gabimi të personalizuara
 - ✔ Dizajn modern, minimal dhe i optimizuar për mobile  
 - ✔ Navigim i thjeshtë dhe intuitiv  
 - ✔ Strukturë e pastër dhe e dokumentuar mirë  
@@ -67,8 +67,6 @@ Projekti është zhvilluar nga:
 - **Erik Salihu**  
 - **Meris Misini**  
 - **Jasin Krasniqi**  
-
-si pjesë e dorëzimit për **Fazën I** të projektit të lëndës *Inxhinieri e Ueb-it*.
 
 ---
 
