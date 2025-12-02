@@ -75,5 +75,3 @@ si pjesë e dorëzimit për **Fazën I** të projektit të lëndës *Inxhinieri 
 ## 📌 Statusi i projektit
 Faza I — **Përfunduar**  
 (Frontend statik, validim formularësh, strukturë kryesore)
-
----
