@@ -77,6 +77,3 @@ Faza I — **Përfunduar**
 (Frontend statik, validim formularësh, strukturë kryesore)
 
 ---
-
-## 📄 Licenca
-Ky projekt është zhvilluar për qëllime akademike dhe edukative dhe nuk përmban licencë komerciale.
