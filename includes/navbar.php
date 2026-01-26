@@ -20,7 +20,7 @@ function isActive(string $file, string $current): string {
                 </a>
             </li>
             <li>
-                <a class="<?= isActive('products.php', $current) ?>" href="products.php">
+                <a class="<?= isActive('services.php', $current) ?>" href="services.php">
                     Shërbimet
                 </a>
             </li>
