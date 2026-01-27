@@ -1,29 +1,44 @@
 <?php
-$pageTitle = "Dashboard – Admin";
+$pageTitle = "Dashboard – ExploreKosova";
+
 require_once __DIR__ . "/app/config/config.php";
 require_once __DIR__ . "/app/helpers/auth.php";
+
 requireAdmin();
 
-require_once "includes/header.php";
-require_once "includes/navbar.php";
+require_once __DIR__ . "/includes/header.php";
+require_once __DIR__ . "/includes/navbar.php";
 ?>
 
-<main class="page">
-  <section class="page-header">
-    <h1>Admin Dashboard</h1>
-    <p>Mirë se erdhe, <?= htmlspecialchars($_SESSION['user']['name']) ?> (Admin)</p>
-  </section>
+<main class="page dashboard-page">
 
-  <section class="two-cols">
-    <article>
-      <h2>Menaxho përmbajtjen</h2>
-      <p>Këtu do të vijnë CRUD për Products/News/Contact.</p>
-    </article>
-    <article>
-      <h2>Mesazhet</h2>
-      <p>Këtu do të shfaqen kontakt-mesazhet nga databaza.</p>
-    </article>
-  </section>
+    <section class="page-header">
+        <h1>Admin Dashboard</h1>
+        <p>Mirësevini, <?= htmlspecialchars($_SESSION['user']['name']) ?> 👋</p>
+    </section>
+
+    <section class="dashboard-cards">
+
+        <article class="card">
+            <h3>Përdoruesit</h3>
+            <p>Menaxho përdoruesit e regjistruar.</p>
+            <a href="#" class="btn-secondary">Shiko përdoruesit</a>
+        </article>
+
+        <article class="card">
+            <h3>Mesazhet</h3>
+            <p>Lexo mesazhet nga Contact Form.</p>
+            <a href="#" class="btn-secondary">Shiko mesazhet</a>
+        </article>
+
+        <article class="card">
+            <h3>Përmbajtja</h3>
+            <p>Menaxho lajme, produkte ose shërbime.</p>
+            <a href="#" class="btn-secondary">Menaxho përmbajtjen</a>
+        </article>
+
+    </section>
+
 </main>
 
-<?php require_once "includes/footer.php"; ?>
+<?php require_once __DIR__ . "/includes/footer.php"; ?>

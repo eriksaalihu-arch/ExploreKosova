@@ -1,7 +1,8 @@
 <?php
 $pageTitle = "Ballina – ExploreKosova";
-require_once "includes/header.php";
-require_once "includes/navbar.php";
+
+require_once __DIR__ . "/includes/header.php";
+require_once __DIR__ . "/includes/navbar.php";
 ?>
 
 <main class="page home-page">
@@ -10,7 +11,7 @@ require_once "includes/navbar.php";
         <div class="hero-content">
             <h1>Zbulo Kosovën</h1>
             <p>Eksploro natyrën, qytetet dhe traditën e vendit me ture profesionale.</p>
-            <a href="products.php" class="btn-primary">Shiko turet</a>
+            <a href="services.php" class="btn-primary">Shiko turet</a>
         </div>
     </section>
 
@@ -20,19 +21,22 @@ require_once "includes/navbar.php";
         <div class="cards">
 
             <article class="card">
-                <img src="https://images.unsplash.com/photo-1644175616886-a7644f85fe7c?w=900&auto=format&fit=crop&q=60" alt="Guida lokale për aventurë në Kosovë">
+                <img src="https://images.unsplash.com/photo-1644175616886-a7644f85fe7c?w=900&auto=format&fit=crop&q=60"
+                     alt="Guida lokale për aventurë në Kosovë">
                 <h3>Guida lokale</h3>
                 <p>Eksploro me ekspertë që njohin vendin.</p>
             </article>
 
             <article class="card">
-                <img src="https://images.unsplash.com/photo-1622151680932-c855a0a0b011?w=900&auto=format&fit=crop&q=60" alt="Kulturë dhe qytete autentike të Kosovës">
-                <h3>Qytete & kulturë</h3>
+                <img src="https://images.unsplash.com/photo-1622151680932-c855a0a0b011?w=900&auto=format&fit=crop&q=60"
+                     alt="Kulturë dhe qytete autentike të Kosovës">
+                <h3>Qytete &amp; kulturë</h3>
                 <p>Përjeto energjinë urbane dhe traditat kulturore të Kosovës.</p>
             </article>
 
             <article class="card">
-                <img src="https://images.unsplash.com/photo-1658413380634-e127bbaeeb7b?w=900&auto=format&fit=crop&q=60" alt="Ushqim tradicional dhe shije lokale të Kosovës">
+                <img src="https://images.unsplash.com/photo-1658413380634-e127bbaeeb7b?w=900&auto=format&fit=crop&q=60"
+                     alt="Ushqim tradicional dhe shije lokale të Kosovës">
                 <h3>Ushqim tradicional</h3>
                 <p>Shije autentike dhe receta lokale.</p>
             </article>
@@ -42,4 +46,4 @@ require_once "includes/navbar.php";
 
 </main>
 
-<?php require_once "includes/footer.php"; ?>
+<?php require_once __DIR__ . "/includes/footer.php"; ?>

@@ -1,13 +1,14 @@
 <?php
-$pageTitle = "Detajet e Shërbimeve – ExploreKosova";
-require_once "includes/header.php";
-require_once "includes/navbar.php";
+$pageTitle = "Detajet e Shërbimit – ExploreKosova";
+
+require_once __DIR__ . "/includes/header.php";
+require_once __DIR__ . "/includes/navbar.php";
 ?>
 
 <main class="page">
 
     <section class="page-header">
-        <h1>Detajet e Shërbimeve</h1>
+        <h1>Detajet e Shërbimit</h1>
         <p>Shiko detajet e tureve më të kërkuara në Kosovë.</p>
     </section>
 
@@ -67,4 +68,4 @@ require_once "includes/navbar.php";
 
 </main>
 
-<?php require_once "includes/footer.php"; ?>
+<?php require_once __DIR__ . "/includes/footer.php"; ?>

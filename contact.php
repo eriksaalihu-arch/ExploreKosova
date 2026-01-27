@@ -1,7 +1,8 @@
 <?php
 $pageTitle = "Kontakt – ExploreKosova";
-require_once "includes/header.php";
-require_once "includes/navbar.php";
+
+require_once __DIR__ . "/includes/header.php";
+require_once __DIR__ . "/includes/navbar.php";
 ?>
 
 <main class="page form-page">
@@ -9,31 +10,42 @@ require_once "includes/navbar.php";
     <section class="page-header">
         <h1>Na kontakto</h1>
         <p>Na shkruaj për rezervime ose informata rreth shërbimeve tona.</p>
+
+        <?php if (!empty($_GET['error'])): ?>
+            <p class="error-msg" style="margin-top:10px;">
+                <?= htmlspecialchars($_GET['error']) ?>
+            </p>
+        <?php endif; ?>
+
+        <?php if (!empty($_GET['success'])): ?>
+            <p class="success-msg" style="margin-top:10px;">
+                Mesazhi u dërgua me sukses.
+            </p>
+        <?php endif; ?>
     </section>
 
-    <form id="contactForm" class="form-card">
+    <form id="contactForm" class="form-card" method="POST" action="contact_submit.php">
         <div>
             <label for="contactName">Emri</label>
-            <input type="text" id="contactName" placeholder="Shkruaj emrin tënd">
+            <input type="text" id="contactName" name="name" placeholder="Shkruaj emrin tënd">
             <div class="error-msg"></div>
         </div>
 
         <div>
             <label for="contactEmail">Email</label>
-            <input type="email" id="contactEmail" placeholder="Shkruaj emailin tënd">
+            <input type="email" id="contactEmail" name="email" placeholder="Shkruaj emailin tënd">
             <div class="error-msg"></div>
         </div>
 
         <div>
             <label for="contactMessage">Mesazhi</label>
-            <textarea id="contactMessage" placeholder="Shkruaj mesazhin..."></textarea>
+            <textarea id="contactMessage" name="message" placeholder="Shkruaj mesazhin..."></textarea>
             <div class="error-msg"></div>
         </div>
 
         <button class="btn-primary" type="submit">Dërgo</button>
-        <div id="contactSuccess" class="success-msg"></div>
     </form>
 
 </main>
 
-<?php require_once "includes/footer.php"; ?>
+<?php require_once __DIR__ . "/includes/footer.php"; ?>

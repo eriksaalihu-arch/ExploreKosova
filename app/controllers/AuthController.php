@@ -3,59 +3,107 @@ declare(strict_types=1);
 
 class AuthController
 {
+
     public static function register(array $post): array
     {
-        $name = trim($post['name'] ?? '');
-        $email = strtolower(trim($post['email'] ?? ''));
-        $password = $post['password'] ?? '';
-        $confirm = $post['confirm'] ?? '';
+        $name     = trim((string)($post['name'] ?? ''));
+        $email    = strtolower(trim((string)($post['email'] ?? '')));
+        $password = (string)($post['password'] ?? '');
+        $confirm  = (string)($post['confirm'] ?? '');
 
         $errors = [];
 
-        if ($name === '' || mb_strlen($name) < 2) $errors[] = "Emri është i detyrueshëm (min 2 shkronja).";
-        if ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) $errors[] = "Email i pavlefshëm.";
-        if (mb_strlen($password) < 6) $errors[] = "Fjalëkalimi duhet të ketë minimum 6 karaktere.";
-        if ($password !== $confirm) $errors[] = "Fjalëkalimet nuk përputhen.";
+        if ($name === '' || mb_strlen($name) < 2) {
+            $errors[] = "Emri duhet të ketë të paktën 2 karaktere.";
+        }
 
-        if (User::findByEmail($email)) $errors[] = "Ky email ekziston tashmë.";
+        if ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $errors[] = "Email i pavlefshëm.";
+        }
 
-        if ($errors) return ['ok' => false, 'errors' => $errors];
+        if (mb_strlen($password) < 6) {
+            $errors[] = "Fjalëkalimi duhet të ketë minimum 6 karaktere.";
+        }
 
-        $hash = password_hash($password, PASSWORD_DEFAULT);
-        $id = User::create($name, $email, $hash, 'user');
+        if ($password !== $confirm) {
+            $errors[] = "Fjalëkalimet nuk përputhen.";
+        }
 
-        return ['ok' => true, 'user_id' => $id];
+        if ($email !== '' && User::findByEmail($email)) {
+            $errors[] = "Ky email ekziston tashmë.";
+        }
+
+        if (!empty($errors)) {
+            return [
+                'ok'     => false,
+                'errors' => $errors
+            ];
+        }
+
+        $passwordHash = password_hash($password, PASSWORD_DEFAULT);
+
+        $userId = User::create($name, $email, $passwordHash, 'user');
+
+        return [
+            'ok'      => true,
+            'user_id' => $userId
+        ];
     }
 
     public static function login(array $post): array
     {
-        $email = strtolower(trim($post['email'] ?? ''));
-        $password = $post['password'] ?? '';
+        $email    = strtolower(trim((string)($post['email'] ?? '')));
+        $password = (string)($post['password'] ?? '');
 
         $errors = [];
-        if ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) $errors[] = "Email i pavlefshëm.";
-        if ($password === '') $errors[] = "Fjalëkalimi është i detyrueshëm.";
-        if ($errors) return ['ok' => false, 'errors' => $errors];
 
-        $user = User::findByEmail($email);
-        if (!$user || !password_verify($password, $user['password_hash'])) {
-            return ['ok' => false, 'errors' => ["Email ose fjalëkalim gabim."]];
+        if ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $errors[] = "Email i pavlefshëm.";
         }
 
-        if (session_status() === PHP_SESSION_NONE) session_start();
+        if ($password === '') {
+            $errors[] = "Fjalëkalimi është i detyrueshëm.";
+        }
+
+        if (!empty($errors)) {
+            return [
+                'ok'     => false,
+                'errors' => $errors
+            ];
+        }
+
+        $user = User::findByEmail($email);
+
+        if (!$user || !password_verify($password, $user['password_hash'])) {
+            return [
+                'ok'     => false,
+                'errors' => ["Email ose fjalëkalim gabim."]
+            ];
+        }
+
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
         $_SESSION['user'] = [
-            'id' => (int)$user['id'],
-            'name' => $user['name'],
+            'id'    => (int)$user['id'],
+            'name'  => $user['name'],
             'email' => $user['email'],
-            'role' => $user['role'],
+            'role'  => $user['role']
         ];
 
-        return ['ok' => true, 'role' => $user['role']];
+        return [
+            'ok'   => true,
+            'role' => $user['role']
+        ];
     }
 
     public static function logout(): void
     {
-        if (session_status() === PHP_SESSION_NONE) session_start();
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
         $_SESSION = [];
         session_destroy();
     }

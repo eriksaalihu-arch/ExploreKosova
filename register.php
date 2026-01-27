@@ -1,7 +1,8 @@
 <?php
 $pageTitle = "Regjistrohu – ExploreKosova";
-require_once "includes/header.php";
-require_once "includes/navbar.php";
+
+require_once __DIR__ . "/includes/header.php";
+require_once __DIR__ . "/includes/navbar.php";
 ?>
 
 <main class="page form-page">
@@ -21,25 +22,49 @@ require_once "includes/navbar.php";
 
         <div>
             <label for="regName">Emri</label>
-            <input type="text" id="regName" name="name" placeholder="Shkruaj emrin tënd">
+            <input
+                type="text"
+                id="regName"
+                name="name"
+                placeholder="Shkruaj emrin tënd"
+                required
+            >
             <div class="error-msg"></div>
         </div>
 
         <div>
             <label for="regEmail">Email</label>
-            <input type="email" id="regEmail" name="email" placeholder="Shkruaj emailin tënd">
+            <input
+                type="email"
+                id="regEmail"
+                name="email"
+                placeholder="Shkruaj emailin tënd"
+                required
+            >
             <div class="error-msg"></div>
         </div>
 
         <div>
             <label for="regPassword">Fjalëkalimi</label>
-            <input type="password" id="regPassword" name="password" placeholder="Zgjidh një fjalëkalim">
+            <input
+                type="password"
+                id="regPassword"
+                name="password"
+                placeholder="Zgjidh një fjalëkalim"
+                required
+            >
             <div class="error-msg"></div>
         </div>
 
         <div>
             <label for="regConfirm">Konfirmo fjalëkalimin</label>
-            <input type="password" id="regConfirm" name="confirm" placeholder="Shkruaj përsëri fjalëkalimin">
+            <input
+                type="password"
+                id="regConfirm"
+                name="confirm"
+                placeholder="Shkruaj përsëri fjalëkalimin"
+                required
+            >
             <div class="error-msg"></div>
         </div>
 
@@ -50,4 +75,4 @@ require_once "includes/navbar.php";
 
 </main>
 
-<?php require_once "includes/footer.php"; ?>
+<?php require_once __DIR__ . "/includes/footer.php"; ?>
