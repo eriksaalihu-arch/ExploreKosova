@@ -1,4 +1,5 @@
 <?php
+
 $pageTitle = "Detajet e turit – ExploreKosova";
 
 require_once __DIR__ . "/app/config/config.php";
@@ -8,21 +9,9 @@ require_once __DIR__ . "/app/models/Tour.php";
 require_once __DIR__ . "/includes/header.php";
 require_once __DIR__ . "/includes/navbar.php";
 
+function e(string $v): string { return htmlspecialchars($v, ENT_QUOTES, 'UTF-8'); }
 function asset(string $path): string {
-  $path = trim($path);
-  if ($path === '') return '';
-
-  $path = str_replace('\\', '/', $path);
-
-  $path = preg_replace('#^https?://[^/]+#', '', $path);
-
-  $path = ltrim($path, '/');
-
-  $base = trim(BASE_URL, '/'); 
-  if ($base !== '' && strpos($path, $base . '/') === 0) {
-    $path = substr($path, strlen($base) + 1);
-  }
-
+  $path = ltrim(trim($path), '/');
   return rtrim(BASE_URL, '/') . '/' . $path;
 }
 
