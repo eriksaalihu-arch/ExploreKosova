@@ -71,19 +71,19 @@ require_once __DIR__ . "/includes/navbar.php";
     <!-- ===== 3 CARDS (Users, Messages, Tours) ===== -->
     <section class="two-cols" style="padding:0; justify-content:center;">
 
-      <div class="stat-card" style="max-width:520px; width:100%;">
+      <div class="stat-card" style="max-width:500px; width:100%;">
         <h3>Totali i përdoruesve</h3>
         <div style="font-size:38px; font-weight:800; margin:6px 0 12px;"><?= $totalUsers ?></div>
         <a class="btn-secondary" href="dashboard.php?view=users">Shiko përdoruesit</a>
       </div>
 
-      <div class="stat-card" style="max-width:520px; width:100%;">
+      <div class="stat-card" style="max-width:500px; width:100%;">
         <h3>Totali i mesazheve</h3>
         <div style="font-size:38px; font-weight:800; margin:6px 0 12px;"><?= $totalMessages ?></div>
         <a class="btn-secondary" href="dashboard.php?view=messages">Shiko mesazhet</a>
       </div>
 
-      <div class="stat-card" style="max-width:520px; width:100%;">
+      <div class="stat-card" style="max-width:500px; width:100%;">
         <h3>Totali i tureve</h3>
         <div style="font-size:38px; font-weight:800; margin:6px 0 12px;"><?= $totalTours ?></div>
         <a class="btn-secondary" href="dashboard.php?view=tours">Shiko turet</a>
