@@ -11,18 +11,17 @@ if (session_status() === PHP_SESSION_NONE) session_start();
 if (empty($_SESSION['csrf'])) $_SESSION['csrf'] = bin2hex(random_bytes(16));
 $csrf = $_SESSION['csrf'];
 
-function e(string $v): string {
-  return htmlspecialchars($v, ENT_QUOTES, 'UTF-8');
-}
+function e(string $v): string { return htmlspecialchars($v, ENT_QUOTES, 'UTF-8'); }
 
 $view = $_GET['view'] ?? 'overview';
+$pdo  = Database::connection();
 
-$pdo = Database::connection();
-
-/* ===================== DATA ===================== */
-$totalUsers = (int)$pdo->query("SELECT COUNT(*) FROM users")->fetchColumn();
+/* ===================== COUNTS ===================== */
+$totalUsers    = (int)$pdo->query("SELECT COUNT(*) FROM users")->fetchColumn();
 $totalMessages = (int)$pdo->query("SELECT COUNT(*) FROM contact_messages")->fetchColumn();
+$totalTours    = (int)$pdo->query("SELECT COUNT(*) FROM tours")->fetchColumn();
 
+/* ===================== LATEST DATA ===================== */
 $latestUsers = $pdo->query("
   SELECT id, name, email, role, created_at
   FROM users
@@ -33,6 +32,13 @@ $latestUsers = $pdo->query("
 $latestMessages = $pdo->query("
   SELECT id, name, email, message, created_at
   FROM contact_messages
+  ORDER BY id DESC
+  LIMIT 5
+")->fetchAll();
+
+$latestTours = $pdo->query("
+  SELECT id, title, short_description, created_at
+  FROM tours
   ORDER BY id DESC
   LIMIT 5
 ")->fetchAll();
@@ -54,7 +60,6 @@ require_once __DIR__ . "/includes/navbar.php";
     <p>Mirësevini, <?= e($_SESSION['user']['name']) ?></p>
   </section>
 
-  <!-- ===== TABS (përdor CSS-in tënd .dashboard-tabs) ===== -->
   <div class="dashboard-tabs">
     <a href="dashboard.php?view=overview" class="<?= $view === 'overview' ? 'active' : '' ?>">Përmbledhje</a>
     <a href="dashboard.php?view=users" class="<?= $view === 'users' ? 'active' : '' ?>">Përdoruesit</a>
@@ -62,8 +67,8 @@ require_once __DIR__ . "/includes/navbar.php";
     <a href="dashboard.php?view=tours" class="<?= $view === 'tours' ? 'active' : '' ?>">Turet</a>
   </div>
 
-  <!-- ===================== OVERVIEW ===================== -->
   <?php if ($view === 'overview'): ?>
+    <!-- ===== 3 CARDS (Users, Messages, Tours) ===== -->
     <section class="two-cols" style="padding:0; justify-content:center;">
 
       <div class="dashboard-card" style="max-width:520px; width:100%;">
@@ -78,8 +83,15 @@ require_once __DIR__ . "/includes/navbar.php";
         <a class="btn-secondary" href="dashboard.php?view=messages">Shiko mesazhet</a>
       </div>
 
+      <div class="dashboard-card" style="max-width:520px; width:100%;">
+        <h3>Totali i tureve</h3>
+        <div style="font-size:38px; font-weight:800; margin:6px 0 12px;"><?= $totalTours ?></div>
+        <a class="btn-secondary" href="dashboard.php?view=tours">Shiko turet</a>
+      </div>
+
     </section>
 
+    <!-- ===== LATEST TABLES ===== -->
     <section class="two-cols" style="padding:0; justify-content:center; margin-top:18px;">
 
       <div class="dashboard-card" style="width:100%; max-width:820px;">
@@ -133,9 +145,52 @@ require_once __DIR__ . "/includes/navbar.php";
       </div>
 
     </section>
+
+    <!-- ===== LATEST TOURS TABLE ===== -->
+    <section class="two-cols" style="padding:0; justify-content:center; margin-top:18px;">
+
+      <div class="dashboard-card" style="width:100%; max-width:820px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;">
+          <h3 style="margin:0;">Turet e fundit</h3>
+          <a class="btn-primary" href="admin_tour_form.php">Shto tur</a>
+        </div>
+
+        <div class="table-wrap" style="margin-top:12px;">
+          <table class="table" style="min-width:720px;">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Titulli</th>
+                <th>Përshkrimi</th>
+                <th>Data</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php if (empty($latestTours)): ?>
+                <tr>
+                  <td colspan="4" style="padding:18px;">
+                    <span class="badge">Nuk ka ende ture të regjistruara</span>
+                  </td>
+                </tr>
+              <?php else: ?>
+                <?php foreach ($latestTours as $t): ?>
+                  <tr>
+                    <td><?= (int)$t['id'] ?></td>
+                    <td><?= e($t['title']) ?></td>
+                    <td class="msg-cell"><?= e($t['short_description']) ?></td>
+                    <td><?= e($t['created_at']) ?></td>
+                  </tr>
+                <?php endforeach; ?>
+              <?php endif; ?>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </section>
+
   <?php endif; ?>
 
-  <!-- ===================== USERS ===================== -->
   <?php if ($view === 'users'): ?>
     <section class="dashboard-card">
       <h2 style="margin-top:0;">Përdoruesit</h2>
@@ -168,7 +223,6 @@ require_once __DIR__ . "/includes/navbar.php";
     </section>
   <?php endif; ?>
 
-  <!-- ===================== MESSAGES ===================== -->
   <?php if ($view === 'messages'): ?>
     <section class="dashboard-card">
       <h2 style="margin-top:0;">Mesazhet (Contact Form)</h2>
@@ -209,7 +263,6 @@ require_once __DIR__ . "/includes/navbar.php";
     </section>
   <?php endif; ?>
 
-  <!-- ===================== TOURS ===================== -->
   <?php if ($view === 'tours'): ?>
     <section class="dashboard-card">
       <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;">
