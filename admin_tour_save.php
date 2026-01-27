@@ -56,8 +56,18 @@ $pdfPath   = $existing['pdf_path'] ?? null;
 $imgDir = __DIR__ . "/uploads/images/";
 $pdfDir = __DIR__ . "/uploads/pdfs/";
 
-if (!is_dir($imgDir)) mkdir($imgDir, 0755, true);
-if (!is_dir($pdfDir)) mkdir($pdfDir, 0755, true);
+if (!is_dir($imgDir) && !mkdir($imgDir, 0777, true)) {
+  backToForm($id, "Nuk u krijua folderi uploads/images.");
+}
+if (!is_dir($pdfDir) && !mkdir($pdfDir, 0777, true)) {
+  backToForm($id, "Nuk u krijua folderi uploads/pdfs.");
+}
+if (!is_writable($imgDir)) {
+  backToForm($id, "Folderi uploads/images nuk ka permission për shkrim.");
+}
+if (!is_writable($pdfDir)) {
+  backToForm($id, "Folderi uploads/pdfs nuk ka permission për shkrim.");
+}
 
 /* ===== IMAGE UPLOAD ===== */
 if (!empty($_FILES['image']['name']) && is_uploaded_file($_FILES['image']['tmp_name'])) {
@@ -105,22 +115,20 @@ if (!empty($_FILES['pdf']['name']) && is_uploaded_file($_FILES['pdf']['tmp_name'
   $pdfPath = "uploads/pdfs/" . $name;
 }
 
-$userName = $_SESSION['user']['name'] ?? 'admin';
-
 try {
   if ($id > 0) {
     $stmt = $pdo->prepare("
       UPDATE tours
-      SET title = ?, short_description = ?, content = ?, image_path = ?, pdf_path = ?, updated_by = ?
+      SET title = ?, short_description = ?, content = ?, image_path = ?, pdf_path = ?
       WHERE id = ?
     ");
-    $stmt->execute([$title, $short, $content, $imagePath, $pdfPath, $userName, $id]);
+    $stmt->execute([$title, $short, $content, $imagePath, $pdfPath, $id]);
   } else {
     $stmt = $pdo->prepare("
-      INSERT INTO tours (title, short_description, content, image_path, pdf_path, created_by, updated_by)
-      VALUES (?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO tours (title, short_description, content, image_path, pdf_path)
+      VALUES (?, ?, ?, ?, ?)
     ");
-    $stmt->execute([$title, $short, $content, $imagePath, $pdfPath, $userName, $userName]);
+    $stmt->execute([$title, $short, $content, $imagePath, $pdfPath]);
   }
 } catch (Throwable $e) {
   backToForm($id, "DB gabim: " . $e->getMessage());
