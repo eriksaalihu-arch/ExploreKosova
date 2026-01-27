@@ -11,6 +11,10 @@ require_once __DIR__ . "/includes/navbar.php";
 $tours = Tour::all();
 
 function e(string $v): string { return htmlspecialchars($v, ENT_QUOTES, 'UTF-8'); }
+function asset(string $path): string {
+  $path = ltrim(trim($path), '/');               
+  return rtrim(BASE_URL, '/') . '/' . $path;  
+}
 ?>
 
 <main class="page">
@@ -27,7 +31,7 @@ function e(string $v): string { return htmlspecialchars($v, ENT_QUOTES, 'UTF-8')
     <?php foreach ($tours as $t): ?>
       <article class="card">
         <?php if (!empty($t['image_path'])): ?>
-          <img src="<?= e($t['image_path']) ?>" alt="<?= e($t['title']) ?>">
+          <img src="<?= e(asset($t['image_path'])) ?>" alt="<?= e($t['title']) ?>">
         <?php endif; ?>
 
         <h3><?= e($t['title']) ?></h3>
