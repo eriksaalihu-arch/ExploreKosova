@@ -1,11 +1,11 @@
 <?php
-declare(strict_types=1);
-
 $pageTitle = "Dashboard – ExploreKosova";
 
 require_once __DIR__ . "/app/config/config.php";
 require_once __DIR__ . "/app/config/Database.php";
 require_once __DIR__ . "/app/helpers/auth.php";
+require_once __DIR__ . "/app/models/User.php";
+require_once __DIR__ . "/app/models/Tour.php";
 
 requireAdmin();
 
@@ -13,26 +13,36 @@ if (session_status() === PHP_SESSION_NONE) session_start();
 if (empty($_SESSION['csrf'])) $_SESSION['csrf'] = bin2hex(random_bytes(16));
 $csrf = $_SESSION['csrf'];
 
+$view = $_GET['view'] ?? 'overview';
+
 $pdo = Database::connection();
 
-$view = $_GET['view'] ?? 'overview';
-$allowed = ['overview', 'users', 'messages'];
-if (!in_array($view, $allowed, true)) $view = 'overview';
-
-function e(string $v): string { return htmlspecialchars($v, ENT_QUOTES, 'UTF-8'); }
+function e(string $v): string {
+  return htmlspecialchars($v, ENT_QUOTES, 'UTF-8');
+}
 
 $totalUsers = (int)$pdo->query("SELECT COUNT(*) FROM users")->fetchColumn();
 $totalMessages = (int)$pdo->query("SELECT COUNT(*) FROM contact_messages")->fetchColumn();
 
-$users = [];
-if ($view === 'users' || $view === 'overview') {
-    $users = $pdo->query("SELECT id, name, email, role, created_at FROM users ORDER BY id DESC LIMIT 50")->fetchAll();
-}
+$latestUsers = $pdo->query("
+  SELECT id, name, email, role, created_at
+  FROM users
+  ORDER BY id DESC
+  LIMIT 5
+")->fetchAll();
 
-$messages = [];
-if ($view === 'messages' || $view === 'overview') {
-    $messages = $pdo->query("SELECT id, name, email, message, created_at FROM contact_messages ORDER BY id DESC LIMIT 50")->fetchAll();
-}
+$latestMessages = $pdo->query("
+  SELECT id, name, email, message, created_at
+  FROM contact_messages
+  ORDER BY id DESC
+  LIMIT 5
+")->fetchAll();
+
+$tours = $pdo->query("
+  SELECT id, title, short_description, created_at
+  FROM tours
+  ORDER BY id DESC
+")->fetchAll();
 
 require_once __DIR__ . "/includes/header.php";
 require_once __DIR__ . "/includes/navbar.php";
@@ -40,163 +50,194 @@ require_once __DIR__ . "/includes/navbar.php";
 
 <main class="page dashboard-page">
 
-    <section class="page-header">
-        <h1>Admin Dashboard</h1>
-        <p>Mirësevini, <?= e($_SESSION['user']['name'] ?? 'Admin') ?> 👋</p>
+  <section class="page-header">
+    <h1>Admin Dashboard</h1>
+    <p>Mirësevini, <?= e($_SESSION['user']['name']) ?></p>
+  </section>
+
+  <nav class="dashboard-nav">
+    <a href="dashboard.php?view=overview" class="<?= $view === 'overview' ? 'active' : '' ?>">Përmbledhje</a>
+    <a href="dashboard.php?view=users" class="<?= $view === 'users' ? 'active' : '' ?>">Përdoruesit</a>
+    <a href="dashboard.php?view=messages" class="<?= $view === 'messages' ? 'active' : '' ?>">Mesazhet</a>
+    <a href="dashboard.php?view=tours" class="<?= $view === 'tours' ? 'active' : '' ?>">Turet</a>
+  </nav>
+
+  <?php if ($view === 'overview'): ?>
+    <section class="dashboard-grid">
+
+      <div class="dash-card">
+        <h3>Totali i përdoruesve</h3>
+        <div class="dash-number"><?= $totalUsers ?></div>
+        <a class="btn-secondary" href="dashboard.php?view=users">Shiko përdoruesit</a>
+      </div>
+
+      <div class="dash-card">
+        <h3>Totali i mesazheve</h3>
+        <div class="dash-number"><?= $totalMessages ?></div>
+        <a class="btn-secondary" href="dashboard.php?view=messages">Shiko mesazhet</a>
+      </div>
+
     </section>
 
-    <section class="dashboard-tabs">
-        <a class="<?= $view==='overview' ? 'active' : '' ?>" href="dashboard.php?view=overview">Përmbledhje</a>
-        <a class="<?= $view==='users' ? 'active' : '' ?>" href="dashboard.php?view=users">Përdoruesit</a>
-        <a class="<?= $view==='messages' ? 'active' : '' ?>" href="dashboard.php?view=messages">Mesazhet</a>
+    <section class="dashboard-grid two-cols">
+
+      <div class="dash-card">
+        <h3>Përdoruesit e fundit</h3>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Emri</th>
+              <th>Email</th>
+              <th>Roli</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php foreach ($latestUsers as $u): ?>
+              <tr>
+                <td><?= (int)$u['id'] ?></td>
+                <td><?= e($u['name']) ?></td>
+                <td><?= e($u['email']) ?></td>
+                <td><?= e($u['role']) ?></td>
+              </tr>
+            <?php endforeach; ?>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="dash-card">
+        <h3>Mesazhet e fundit</h3>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Emri</th>
+              <th>Email</th>
+              <th>Mesazhi</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php foreach ($latestMessages as $m): ?>
+              <tr>
+                <td><?= e($m['name']) ?></td>
+                <td><?= e($m['email']) ?></td>
+                <td><?= e(mb_strimwidth($m['message'], 0, 60, '...')) ?></td>
+              </tr>
+            <?php endforeach; ?>
+          </tbody>
+        </table>
+      </div>
+
     </section>
+  <?php endif; ?>
 
-    <?php if (!empty($_GET['ok'])): ?>
-        <p class="success-msg" style="margin-bottom:12px;"><?= e((string)$_GET['ok']) ?></p>
-    <?php endif; ?>
-    <?php if (!empty($_GET['err'])): ?>
-        <p class="error-msg" style="margin-bottom:12px;"><?= e((string)$_GET['err']) ?></p>
-    <?php endif; ?>
+  <?php if ($view === 'users'): ?>
+    <section class="dash-card">
+      <h2>Përdoruesit</h2>
 
-    <?php if ($view === 'overview'): ?>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Emri</th>
+            <th>Email</th>
+            <th>Roli</th>
+            <th>Krijuar</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php foreach ($latestUsers as $u): ?>
+            <tr>
+              <td><?= (int)$u['id'] ?></td>
+              <td><?= e($u['name']) ?></td>
+              <td><?= e($u['email']) ?></td>
+              <td><?= e($u['role']) ?></td>
+              <td><?= e($u['created_at']) ?></td>
+            </tr>
+          <?php endforeach; ?>
+        </tbody>
+      </table>
+    </section>
+  <?php endif; ?>
 
-        <section class="two-cols" style="gap:18px; margin-bottom:18px;">
-            <article class="dashboard-card">
-                <h3>Totali i përdoruesve</h3>
-                <p style="font-size:34px; margin:10px 0; font-weight:800;"><?= $totalUsers ?></p>
-                <a class="btn-secondary" href="dashboard.php?view=users">Shiko përdoruesit</a>
-            </article>
+  <?php if ($view === 'messages'): ?>
+    <section class="dash-card">
+      <h2>Mesazhet (Contact Form)</h2>
 
-            <article class="dashboard-card">
-                <h3>Totali i mesazheve</h3>
-                <p style="font-size:34px; margin:10px 0; font-weight:800;"><?= $totalMessages ?></p>
-                <a class="btn-secondary" href="dashboard.php?view=messages">Shiko mesazhet</a>
-            </article>
-        </section>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Emri</th>
+            <th>Email</th>
+            <th>Mesazhi</th>
+            <th>Data</th>
+            <th>Veprime</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php foreach ($latestMessages as $m): ?>
+            <tr>
+              <td><?= (int)$m['id'] ?></td>
+              <td><?= e($m['name']) ?></td>
+              <td><?= e($m['email']) ?></td>
+              <td><?= e($m['message']) ?></td>
+              <td><?= e($m['created_at']) ?></td>
+              <td>
+                <a class="btn-secondary"
+                   href="admin_message_delete.php?id=<?= (int)$m['id'] ?>&csrf=<?= e($csrf) ?>"
+                   onclick="return confirm('A je i sigurt?')">
+                   Fshij
+                </a>
+              </td>
+            </tr>
+          <?php endforeach; ?>
+        </tbody>
+      </table>
+    </section>
+  <?php endif; ?>
 
-        <section class="two-cols" style="gap:18px;">
-            <article>
-                <h2>Përdoruesit e fundit</h2>
-                <div class="table-wrap">
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Emri</th>
-                            <th>Email</th>
-                            <th>Role</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <?php foreach (array_slice($users, 0, 10) as $u): ?>
-                            <tr>
-                                <td><?= (int)$u['id'] ?></td>
-                                <td><?= e($u['name']) ?></td>
-                                <td><?= e($u['email']) ?></td>
-                                <td><span class="badge"><?= e($u['role']) ?></span></td>
-                            </tr>
-                        <?php endforeach; ?>
-                        </tbody>
-                    </table>
-                </div>
-            </article>
+  <?php if ($view === 'tours'): ?>
+    <section class="dash-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;">
+        <h2>Turet</h2>
+        <a class="btn-primary" href="admin_tour_form.php">Shto tur</a>
+      </div>
 
-            <article>
-                <h2>Mesazhet e fundit</h2>
-                <div class="table-wrap">
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th>Emri</th>
-                            <th>Email</th>
-                            <th>Mesazhi</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <?php foreach (array_slice($messages, 0, 8) as $m): ?>
-                            <tr>
-                                <td><?= e($m['name']) ?></td>
-                                <td><?= e($m['email']) ?></td>
-                                <td class="msg-cell" title="<?= e($m['message']) ?>"><?= e($m['message']) ?></td>
-                            </tr>
-                        <?php endforeach; ?>
-                        </tbody>
-                    </table>
-                </div>
-            </article>
-        </section>
-
-    <?php elseif ($view === 'users'): ?>
-
-        <h2>Përdoruesit</h2>
-        <div class="table-wrap">
-            <table class="table">
-                <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Emri</th>
-                    <th>Email</th>
-                    <th>Role</th>
-                    <th>Krijuar</th>
-                </tr>
-                </thead>
-                <tbody>
-                <?php foreach ($users as $u): ?>
-                    <tr>
-                        <td><?= (int)$u['id'] ?></td>
-                        <td><?= e($u['name']) ?></td>
-                        <td><?= e($u['email']) ?></td>
-                        <td><span class="badge"><?= e($u['role']) ?></span></td>
-                        <td><?= e((string)$u['created_at']) ?></td>
-                    </tr>
-                <?php endforeach; ?>
-                </tbody>
-            </table>
-        </div>
-
-    <?php elseif ($view === 'messages'): ?>
-
-        <h2>Mesazhet (Contact Form)</h2>
-
-        <?php if (empty($messages)): ?>
-            <p class="error-msg">Nuk ka ende mesazhe.</p>
-        <?php else: ?>
-            <div class="table-wrap">
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Emri</th>
-                        <th>Email</th>
-                        <th>Mesazhi</th>
-                        <th>Data</th>
-                        <th>Veprime</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <?php foreach ($messages as $m): ?>
-                        <tr>
-                            <td><?= (int)$m['id'] ?></td>
-                            <td><?= e($m['name']) ?></td>
-                            <td><?= e($m['email']) ?></td>
-                            <td class="msg-cell" title="<?= e($m['message']) ?>"><?= e($m['message']) ?></td>
-                            <td><?= e((string)$m['created_at']) ?></td>
-                            <td>
-                                <form method="POST" action="admin_message_delete.php"
-                                      onsubmit="return confirm('A je i sigurt që do ta fshish këtë mesazh?');">
-                                    <input type="hidden" name="csrf" value="<?= e($csrf) ?>">
-                                    <input type="hidden" name="message_id" value="<?= (int)$m['id'] ?>">
-                                    <button type="submit" class="btn-danger">Fshij</button>
-                                </form>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
-        <?php endif; ?>
-
-    <?php endif; ?>
+      <?php if (empty($tours)): ?>
+        <p class="error-msg">Nuk ka ende ture të regjistruara.</p>
+      <?php else: ?>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Titulli</th>
+              <th>Përshkrimi</th>
+              <th>Data</th>
+              <th>Veprime</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php foreach ($tours as $t): ?>
+              <tr>
+                <td><?= (int)$t['id'] ?></td>
+                <td><?= e($t['title']) ?></td>
+                <td><?= e($t['short_description']) ?></td>
+                <td><?= e($t['created_at']) ?></td>
+                <td>
+                  <a class="btn-secondary" href="admin_tour_form.php?id=<?= (int)$t['id'] ?>">Edito</a>
+                  <a class="btn-secondary"
+                     href="admin_tour_delete.php?id=<?= (int)$t['id'] ?>&csrf=<?= e($csrf) ?>"
+                     onclick="return confirm('A je i sigurt që dëshiron ta fshish këtë tur?')">
+                     Fshij
+                  </a>
+                </td>
+              </tr>
+            <?php endforeach; ?>
+          </tbody>
+        </table>
+      <?php endif; ?>
+    </section>
+  <?php endif; ?>
 
 </main>
 
