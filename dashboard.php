@@ -57,7 +57,7 @@ require_once __DIR__ . "/includes/navbar.php";
 
   <section class="page-header">
     <h1>Admin Dashboard</h1>
-    <p>Mirësevini, <?= e($_SESSION['user']['name']) ?></p>
+    <p>Mirësevini, <?= e($_SESSION['user']['name']) ?>👋🏻</p>
   </section>
 
   <div class="dashboard-tabs">
