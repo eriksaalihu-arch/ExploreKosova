@@ -47,7 +47,6 @@ if (!empty($_FILES['image']['name'])) {
   $imagePath = BASE_URL . "/uploads/images/" . $filename;
 }
 
-// Upload PDF
 if (!empty($_FILES['pdf']['name'])) {
   $ext = strtolower(pathinfo($_FILES['pdf']['name'], PATHINFO_EXTENSION));
   if ($ext !== 'pdf') {
