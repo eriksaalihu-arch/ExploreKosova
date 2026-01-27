@@ -1,145 +1,112 @@
 <?php
+$pageTitle = "Shto / Edito Tur – ExploreKosova";
+
 require_once __DIR__ . "/app/config/config.php";
 require_once __DIR__ . "/app/config/Database.php";
 require_once __DIR__ . "/app/helpers/auth.php";
 
-if (session_status() === PHP_SESSION_NONE) {
-  session_start();
-}
-
 requireAdmin();
 
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-  header("Location: dashboard.php?view=tours");
-  exit;
-}
+if (session_status() === PHP_SESSION_NONE) session_start();
+if (empty($_SESSION['csrf'])) $_SESSION['csrf'] = bin2hex(random_bytes(16));
+$csrf = $_SESSION['csrf'];
 
-if (
-  empty($_POST['csrf']) ||
-  empty($_SESSION['csrf']) ||
-  !hash_equals($_SESSION['csrf'], $_POST['csrf'])
-) {
-  header("Location: admin_tour_form.php?error=" . urlencode("CSRF token gabim. Rifresko faqen dhe provo prapë."));
-  exit;
-}
+function e(string $v): string { return htmlspecialchars($v, ENT_QUOTES, 'UTF-8'); }
 
 $pdo = Database::connection();
 
-function clean(string $v): string { return trim($v); }
-function backToForm(int $id, string $msg): void {
-  $base = "admin_tour_form.php";
-  $q = $id > 0 ? "?id={$id}&" : "?";
-  header("Location: {$base}{$q}error=" . urlencode($msg));
-  exit;
-}
+$id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 
-$id      = isset($_POST['id']) ? (int)$_POST['id'] : 0;
-$title   = clean($_POST['title'] ?? '');
-$short   = clean($_POST['short_description'] ?? '');
-$content = clean($_POST['content'] ?? '');
+$tour = [
+  'id' => 0,
+  'title' => '',
+  'short_description' => '',
+  'content' => '',
+  'image_path' => '',
+  'pdf_path' => ''
+];
 
-if (mb_strlen($title) < 3)   backToForm($id, "Titulli duhet të ketë të paktën 3 karaktere.");
-if (mb_strlen($short) < 10)  backToForm($id, "Përshkrimi i shkurtër duhet të ketë të paktën 10 karaktere.");
-if (mb_strlen($content) < 20) backToForm($id, "Përmbajtja duhet të ketë të paktën 20 karaktere.");
-
-$existing = null;
 if ($id > 0) {
   $stmt = $pdo->prepare("SELECT * FROM tours WHERE id = ?");
   $stmt->execute([$id]);
-  $existing = $stmt->fetch();
-  if (!$existing) {
-    header("Location: dashboard.php?view=tours");
-    exit;
-  }
+  $row = $stmt->fetch(PDO::FETCH_ASSOC);
+  if ($row) $tour = $row;
 }
 
-$imagePath = $existing['image_path'] ?? null;
-$pdfPath   = $existing['pdf_path'] ?? null;
+require_once __DIR__ . "/includes/header.php";
+require_once __DIR__ . "/includes/navbar.php";
+?>
 
-$baseUploadImages = __DIR__ . "/uploads/images/";
-$baseUploadPdfs   = __DIR__ . "/uploads/pdfs/";
+<main class="page">
+  <section class="page-header">
+    <h1><?= $id > 0 ? "Edito Tur" : "Shto Tur" ?></h1>
+    <p>Plotëso të dhënat e turit. Foto dhe PDF janë opsionale.</p>
 
-if (!is_dir($baseUploadImages)) @mkdir($baseUploadImages, 0755, true);
-if (!is_dir($baseUploadPdfs))   @mkdir($baseUploadPdfs, 0755, true);
+    <?php if (!empty($_GET['error'])): ?>
+      <div class="auth-alert error"><?= e($_GET['error']) ?></div>
+    <?php endif; ?>
 
-if (!empty($_FILES['image']['name']) && is_uploaded_file($_FILES['image']['tmp_name'])) {
-  $ext = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
-  $allowedExt = ['jpg', 'jpeg', 'png', 'webp'];
+    <?php if (!empty($_GET['success'])): ?>
+      <div class="auth-alert success"><?= e($_GET['success']) ?></div>
+    <?php endif; ?>
+  </section>
 
-  if (!in_array($ext, $allowedExt, true)) {
-    backToForm($id, "Foto lejohet vetëm: jpg, jpeg, png, webp.");
-  }
+  <div class="dashboard-container">
+    <div class="dashboard-card" style="max-width:820px;margin:0 auto;">
+      <!-- ✅ enctype është shumë i rëndësishëm për $_FILES -->
+      <form method="POST" action="admin_tour_save.php" enctype="multipart/form-data" class="form-card" style="max-width:100%;">
+        
+        <input type="hidden" name="csrf" value="<?= e($csrf) ?>">
+        <input type="hidden" name="id" value="<?= (int)$tour['id'] ?>">
 
-  $finfo = new finfo(FILEINFO_MIME_TYPE);
-  $mime  = $finfo->file($_FILES['image']['tmp_name']);
-  $allowedMime = ['image/jpeg', 'image/png', 'image/webp'];
+        <div>
+          <label for="title">Titulli</label>
+          <input id="title" type="text" name="title" value="<?= e($tour['title'] ?? '') ?>" placeholder="p.sh. Prishtina – Zemra moderne e Kosovës" required>
+        </div>
 
-  if (!in_array($mime, $allowedMime, true)) {
-    backToForm($id, "Fotoja nuk është format i lejuar.");
-  }
+        <div>
+          <label for="short_description">Përshkrimi i shkurtër</label>
+          <input id="short_description" type="text" name="short_description" value="<?= e($tour['short_description'] ?? '') ?>" placeholder="1-2 rreshta për turin" required>
+        </div>
 
-  $fileName = "tour_" . time() . "_" . bin2hex(random_bytes(4)) . "." . $ext;
-  $targetFs = $baseUploadImages . $fileName;
+        <div>
+          <label for="content">Përmbajtja</label>
+          <textarea id="content" name="content" rows="8" placeholder="Shkruaj detajet e turit..." required><?= e($tour['content'] ?? '') ?></textarea>
+        </div>
 
-  if (!move_uploaded_file($_FILES['image']['tmp_name'], $targetFs)) {
-    backToForm($id, "Nuk u arrit të ngarkohet fotoja.");
-  }
+        <div>
+          <label for="image">Foto (opsionale)</label>
+          <input id="image" type="file" name="image" accept=".jpg,.jpeg,.png,.webp">
+          <?php if (!empty($tour['image_path'])): ?>
+            <p style="margin-top:8px;">
+              Foto aktuale:
+              <a href="<?= e(ltrim($tour['image_path'], '/')) ?>" target="_blank">Shiko</a>
+            </p>
+          <?php endif; ?>
+        </div>
 
-  if (!empty($existing['image_path'])) {
-    $oldFs = __DIR__ . "/" . ltrim($existing['image_path'], "/");
-    if (is_file($oldFs)) @unlink($oldFs);
-  }
+        <div>
+          <label for="pdf">PDF (opsionale)</label>
+          <input id="pdf" type="file" name="pdf" accept=".pdf">
+          <?php if (!empty($tour['pdf_path'])): ?>
+            <p style="margin-top:8px;">
+              PDF aktual:
+              <a href="<?= e(ltrim($tour['pdf_path'], '/')) ?>" target="_blank">Shiko</a>
+            </p>
+          <?php endif; ?>
+        </div>
 
-  $imagePath = "uploads/images/" . $fileName;
-}
+        <button type="submit" class="btn-primary">
+          <?= $id > 0 ? "Ruaj ndryshimet" : "Ruaj turin" ?>
+        </button>
 
-if (!empty($_FILES['pdf']['name']) && is_uploaded_file($_FILES['pdf']['tmp_name'])) {
-  $ext = strtolower(pathinfo($_FILES['pdf']['name'], PATHINFO_EXTENSION));
-  if ($ext !== 'pdf') {
-    backToForm($id, "Dokumenti lejohet vetëm PDF.");
-  }
+        <div style="margin-top:12px;text-align:center;">
+          <a class="btn-secondary" href="dashboard.php?view=tours">Kthehu te Turet</a>
+        </div>
 
-  $finfo = new finfo(FILEINFO_MIME_TYPE);
-  $mime  = $finfo->file($_FILES['pdf']['tmp_name']);
-  if ($mime !== 'application/pdf') {
-    backToForm($id, "Dokumenti nuk është PDF valid.");
-  }
+      </form>
+    </div>
+  </div>
+</main>
 
-  $fileName = "tour_" . time() . "_" . bin2hex(random_bytes(4)) . ".pdf";
-  $targetFs = $baseUploadPdfs . $fileName;
-
-  if (!move_uploaded_file($_FILES['pdf']['tmp_name'], $targetFs)) {
-    backToForm($id, "Nuk u arrit të ngarkohet PDF.");
-  }
-
-  if (!empty($existing['pdf_path'])) {
-    $oldFs = __DIR__ . "/" . ltrim($existing['pdf_path'], "/");
-    if (is_file($oldFs)) @unlink($oldFs);
-  }
-
-  $pdfPath = "uploads/pdfs/" . $fileName;
-}
-
-$userName = $_SESSION['user']['name'] ?? 'admin';
-
-try {
-  if ($id > 0) {
-    $stmt = $pdo->prepare("
-      UPDATE tours
-      SET title = ?, short_description = ?, content = ?, image_path = ?, pdf_path = ?, updated_by = ?
-      WHERE id = ?
-    ");
-    $stmt->execute([$title, $short, $content, $imagePath, $pdfPath, $userName, $id]);
-  } else {
-    $stmt = $pdo->prepare("
-      INSERT INTO tours (title, short_description, content, image_path, pdf_path, created_by, updated_by)
-      VALUES (?, ?, ?, ?, ?, ?, ?)
-    ");
-    $stmt->execute([$title, $short, $content, $imagePath, $pdfPath, $userName, $userName]);
-  }
-} catch (Throwable $e) {
-  backToForm($id, "Gabim në databazë: " . $e->getMessage());
-}
-
-header("Location: dashboard.php?view=tours");
-exit;
+<?php require_once __DIR__ . "/includes/footer.php"; ?>
