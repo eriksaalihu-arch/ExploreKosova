@@ -152,7 +152,6 @@ require_once __DIR__ . "/includes/navbar.php";
       <div class="dashboard-card" style="width:100%; max-width:820px;">
         <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;">
           <h3 style="margin:0;">Turet e fundit</h3>
-          <a class="btn-primary" href="admin_tour_form.php">Shto tur</a>
         </div>
 
         <div class="table-wrap" style="margin-top:12px;">
