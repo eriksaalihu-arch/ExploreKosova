@@ -1,6 +1,16 @@
 <?php
 $pageTitle = "Ballina – ExploreKosova";
 
+<?php
+$pageTitle = "Ballina – ExploreKosova";
+
+/* LIDHJA ME DATABAZË – VETËM SELECT */
+$conn = mysqli_connect("localhost", "root", "", "explore_kosova");
+
+$query = "SELECT hero_title, hero_description FROM home_content LIMIT 1";
+$result = mysqli_query($conn, $query);
+$home = mysqli_fetch_assoc($result);
+
 require_once __DIR__ . "/includes/header.php";
 require_once __DIR__ . "/includes/navbar.php";
 ?>
