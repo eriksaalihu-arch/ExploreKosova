@@ -1,51 +1,42 @@
 <?php
 $pageTitle = "Shërbimet – ExploreKosova";
 
+require_once __DIR__ . "/app/config/config.php";
+require_once __DIR__ . "/app/config/Database.php";
+require_once __DIR__ . "/app/models/Tour.php";
+
 require_once __DIR__ . "/includes/header.php";
 require_once __DIR__ . "/includes/navbar.php";
+
+$tours = Tour::all();
+
+function e(string $v): string { return htmlspecialchars($v, ENT_QUOTES, 'UTF-8'); }
 ?>
 
 <main class="page">
+  <section class="page-header">
+    <h1>Shërbimet tona</h1>
+    <p>Zgjedhja perfekte për një aventurë të paharrueshme në Kosovë.</p>
+  </section>
 
-    <section class="page-header">
-        <h1>Shërbimet tona</h1>
-        <p>Zgjedhja perfekte për një aventurë të paharrueshme në Kosovë.</p>
-    </section>
+  <section class="cards">
+    <?php if (empty($tours)): ?>
+      <p class="error-msg">Nuk ka ende ture të regjistruara.</p>
+    <?php endif; ?>
 
-    <section class="cards">
+    <?php foreach ($tours as $t): ?>
+      <article class="card">
+        <?php if (!empty($t['image_path'])): ?>
+          <img src="<?= e($t['image_path']) ?>" alt="<?= e($t['title']) ?>">
+        <?php endif; ?>
 
-        <article class="card">
-            <img
-                src="https://images.unsplash.com/photo-1664980395016-0bd4b0456ca5?w=900&auto=format&fit=crop&q=60"
-                alt="Rugova Adventure"
-            >
-            <h3>Rugova Adventure</h3>
-            <p>Aventura malore, hiking, ujëvara dhe natyrë e paprekur.</p>
-            <a href="service-details.php" class="btn-secondary">Shiko detajet</a>
-        </article>
+        <h3><?= e($t['title']) ?></h3>
+        <p><?= e($t['short_description']) ?></p>
 
-        <article class="card">
-            <img
-                src="https://images.unsplash.com/photo-1653684617625-c6d017d05b80?w=900&auto=format&fit=crop&q=60"
-                alt="Prishtina City Tour"
-            >
-            <h3>Prishtina City Tour</h3>
-            <p>Eksplorim historik dhe kulturor i kryeqytetit modern të Kosovës.</p>
-            <a href="service-details.php" class="btn-secondary">Shiko detajet</a>
-        </article>
-
-        <article class="card">
-            <img
-                src="https://images.unsplash.com/photo-1622151680932-c855a0a0b011?w=900&auto=format&fit=crop&q=60"
-                alt="Prizren Heritage Tour"
-            >
-            <h3>Prizren Heritage</h3>
-            <p>Një shëtitje autentike në qytetin më historik dhe kulturor të Kosovës.</p>
-            <a href="service-details.php" class="btn-secondary">Shiko detajet</a>
-        </article>
-
-    </section>
-
+        <a href="service-details.php?id=<?= (int)$t['id'] ?>" class="btn-secondary">Shiko detajet</a>
+      </article>
+    <?php endforeach; ?>
+  </section>
 </main>
 
 <?php require_once __DIR__ . "/includes/footer.php"; ?>

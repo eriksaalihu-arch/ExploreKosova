@@ -13,7 +13,7 @@ require_once __DIR__ . "/includes/navbar.php";
 
         <?php if (!empty($_GET['error'])): ?>
             <p class="error-msg" style="margin-top:10px;">
-                <?= htmlspecialchars($_GET['error']) ?>
+                <?= htmlspecialchars($_GET['error'], ENT_QUOTES, 'UTF-8') ?>
             </p>
         <?php endif; ?>
 
@@ -24,26 +24,52 @@ require_once __DIR__ . "/includes/navbar.php";
         <?php endif; ?>
     </section>
 
-    <form id="contactForm" class="form-card" method="POST" action="contact_submit.php">
+    <form
+        id="contactForm"
+        class="form-card"
+        method="POST"
+        action="contact_submit.php"
+    >
+
         <div>
             <label for="contactName">Emri</label>
-            <input type="text" id="contactName" name="name" placeholder="Shkruaj emrin tënd">
+            <input
+                type="text"
+                id="contactName"
+                name="name"
+                placeholder="Shkruaj emrin tënd"
+                required
+            >
             <div class="error-msg"></div>
         </div>
 
         <div>
             <label for="contactEmail">Email</label>
-            <input type="email" id="contactEmail" name="email" placeholder="Shkruaj emailin tënd">
+            <input
+                type="email"
+                id="contactEmail"
+                name="email"
+                placeholder="Shkruaj emailin tënd"
+                required
+            >
             <div class="error-msg"></div>
         </div>
 
         <div>
             <label for="contactMessage">Mesazhi</label>
-            <textarea id="contactMessage" name="message" placeholder="Shkruaj mesazhin..."></textarea>
+            <textarea
+                id="contactMessage"
+                name="message"
+                placeholder="Shkruaj mesazhin..."
+                rows="5"
+                required
+            ></textarea>
             <div class="error-msg"></div>
         </div>
 
-        <button class="btn-primary" type="submit">Dërgo</button>
+        <button class="btn-primary" type="submit">
+            Dërgo
+        </button>
     </form>
 
 </main>
