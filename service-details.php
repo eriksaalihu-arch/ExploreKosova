@@ -61,8 +61,8 @@ $pdfUrl = asset_url($tour['pdf_path'] ?? '');
 
       <?php if (!empty($pdfUrl)): ?>
         <div style="margin-top:18px; display:flex; gap:12px; flex-wrap:wrap;">
-          <a class="btn-primary" href="<?= e($pdfUrl) ?>" target="_blank" rel="noopener">Hap PDF</a>
-          <a class="btn-secondary" href="<?= e($pdfUrl) ?>" download>Shkarko PDF</a>
+          <a class="btn-pdf primary" href="<?= e($pdfUrl) ?>" target="_blank" rel="noopener">Hap PDF</a>
+          <a class="btn-pdf dark" href="<?= e($pdfUrl) ?>" download>Shkarko PDF</a>
         </div>
       <?php endif; ?>
     </article>
