@@ -117,3 +117,12 @@ if (registerForm) {
     if (!isValid) e.preventDefault();
   });
 }
+
+/* ===================== ERROR DISAPPEAR AFTER 4 SEC ===================== */
+const alertBox = document.querySelector(".auth-alert");
+if (alertBox) {
+  setTimeout(() => {
+    alertBox.style.opacity = "0";
+    setTimeout(() => alertBox.remove(), 400);
+  }, 4000);
+}

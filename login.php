@@ -3,6 +3,10 @@ $pageTitle = "Login – ExploreKosova";
 
 require_once __DIR__ . "/includes/header.php";
 require_once __DIR__ . "/includes/navbar.php";
+
+function e(string $v): string {
+    return htmlspecialchars($v, ENT_QUOTES, 'UTF-8');
+}
 ?>
 
 <main class="page form-page">
@@ -12,23 +16,30 @@ require_once __DIR__ . "/includes/navbar.php";
         <p>Shkruaj të dhënat për t'u qasur në llogari.</p>
 
         <?php if (!empty($_GET['error'])): ?>
-            <p class="error-msg" style="margin-top:10px;">
-                <?= htmlspecialchars($_GET['error']) ?>
-            </p>
+            <div class="auth-alert error">
+                Email ose fjalëkalimi nuk janë të saktë.
+            </div>
         <?php endif; ?>
 
         <?php if (!empty($_GET['success'])): ?>
-            <p class="success-msg" style="margin-top:10px;">
+            <div class="auth-alert success">
                 Regjistrimi u krye me sukses. Tani mund të kyçesh.
-            </p>
+            </div>
         <?php endif; ?>
+
     </section>
 
     <form id="loginForm" class="form-card" method="POST" action="auth_login.php">
 
         <div>
             <label for="loginEmail">Email</label>
-            <input type="email" id="loginEmail" name="email" placeholder="Shkruaj emailin">
+            <input
+                type="email"
+                id="loginEmail"
+                name="email"
+                placeholder="Shkruaj emailin"
+                value="<?= !empty($_GET['email']) ? e((string)$_GET['email']) : '' ?>"
+            >
             <div class="error-msg"></div>
         </div>
 
