@@ -26,13 +26,9 @@ function e(string $v): string { return htmlspecialchars($v, ENT_QUOTES, 'UTF-8')
 
     <?php foreach ($tours as $t): ?>
       <article class="card">
-
-    <?php if (!empty($t['image_path'])): ?>
-  <img
-    src="<?= e(BASE_URL . '/' . ltrim($t['image_path'], '/')) ?>"
-    alt="<?= e($t['title']) ?>"
-  >
-    <?php endif; ?>
+        <?php if (!empty($t['image_path'])): ?>
+          <img src="<?= e($t['image_path']) ?>" alt="<?= e($t['title']) ?>">
+        <?php endif; ?>
 
         <h3><?= e($t['title']) ?></h3>
         <p><?= e($t['short_description']) ?></p>
