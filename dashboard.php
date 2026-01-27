@@ -45,10 +45,10 @@ require_once __DIR__ . "/includes/navbar.php";
         <p>Mirësevini, <?= e($_SESSION['user']['name'] ?? 'Admin') ?> 👋</p>
     </section>
 
-    <section style="display:flex; gap:12px; flex-wrap:wrap; margin-bottom:18px;">
-        <a class="btn-secondary" href="dashboard.php?view=overview">Përmbledhje</a>
-        <a class="btn-secondary" href="dashboard.php?view=users">Përdoruesit</a>
-        <a class="btn-secondary" href="dashboard.php?view=messages">Mesazhet</a>
+    <section class="dashboard-tabs">
+        <a class="<?= $view==='overview' ? 'active' : '' ?>" href="dashboard.php?view=overview">Përmbledhje</a>
+        <a class="<?= $view==='users' ? 'active' : '' ?>" href="dashboard.php?view=users">Përdoruesit</a>
+        <a class="<?= $view==='messages' ? 'active' : '' ?>" href="dashboard.php?view=messages">Mesazhet</a>
     </section>
 
     <?php if (!empty($_GET['ok'])): ?>
@@ -60,16 +60,16 @@ require_once __DIR__ . "/includes/navbar.php";
 
     <?php if ($view === 'overview'): ?>
 
-        <section class="cards" style="margin-bottom:18px;">
-            <article class="card">
+        <section class="two-cols" style="gap:18px; margin-bottom:18px;">
+            <article class="dashboard-card">
                 <h3>Totali i përdoruesve</h3>
-                <p style="font-size:32px; margin:10px 0;"><?= $totalUsers ?></p>
+                <p style="font-size:34px; margin:10px 0; font-weight:800;"><?= $totalUsers ?></p>
                 <a class="btn-secondary" href="dashboard.php?view=users">Shiko përdoruesit</a>
             </article>
 
-            <article class="card">
+            <article class="dashboard-card">
                 <h3>Totali i mesazheve</h3>
-                <p style="font-size:32px; margin:10px 0;"><?= $totalMessages ?></p>
+                <p style="font-size:34px; margin:10px 0; font-weight:800;"><?= $totalMessages ?></p>
                 <a class="btn-secondary" href="dashboard.php?view=messages">Shiko mesazhet</a>
             </article>
         </section>
@@ -77,23 +77,23 @@ require_once __DIR__ . "/includes/navbar.php";
         <section class="two-cols" style="gap:18px;">
             <article>
                 <h2>Përdoruesit e fundit</h2>
-                <div class="form-card" style="overflow:auto;">
-                    <table style="width:100%; border-collapse:collapse;">
+                <div class="table-wrap">
+                    <table class="table">
                         <thead>
                         <tr>
-                            <th style="text-align:left; padding:8px;">ID</th>
-                            <th style="text-align:left; padding:8px;">Emri</th>
-                            <th style="text-align:left; padding:8px;">Email</th>
-                            <th style="text-align:left; padding:8px;">Role</th>
+                            <th>ID</th>
+                            <th>Emri</th>
+                            <th>Email</th>
+                            <th>Role</th>
                         </tr>
                         </thead>
                         <tbody>
                         <?php foreach (array_slice($users, 0, 10) as $u): ?>
                             <tr>
-                                <td style="padding:8px;"><?= (int)$u['id'] ?></td>
-                                <td style="padding:8px;"><?= e($u['name']) ?></td>
-                                <td style="padding:8px;"><?= e($u['email']) ?></td>
-                                <td style="padding:8px;"><?= e($u['role']) ?></td>
+                                <td><?= (int)$u['id'] ?></td>
+                                <td><?= e($u['name']) ?></td>
+                                <td><?= e($u['email']) ?></td>
+                                <td><span class="badge"><?= e($u['role']) ?></span></td>
                             </tr>
                         <?php endforeach; ?>
                         </tbody>
@@ -103,21 +103,21 @@ require_once __DIR__ . "/includes/navbar.php";
 
             <article>
                 <h2>Mesazhet e fundit</h2>
-                <div class="form-card" style="overflow:auto;">
-                    <table style="width:100%; border-collapse:collapse;">
+                <div class="table-wrap">
+                    <table class="table">
                         <thead>
                         <tr>
-                            <th style="text-align:left; padding:8px;">Emri</th>
-                            <th style="text-align:left; padding:8px;">Email</th>
-                            <th style="text-align:left; padding:8px;">Mesazhi</th>
+                            <th>Emri</th>
+                            <th>Email</th>
+                            <th>Mesazhi</th>
                         </tr>
                         </thead>
                         <tbody>
                         <?php foreach (array_slice($messages, 0, 8) as $m): ?>
                             <tr>
-                                <td style="padding:8px;"><?= e($m['name']) ?></td>
-                                <td style="padding:8px;"><?= e($m['email']) ?></td>
-                                <td style="padding:8px;"><?= e(mb_strimwidth($m['message'], 0, 60, '...')) ?></td>
+                                <td><?= e($m['name']) ?></td>
+                                <td><?= e($m['email']) ?></td>
+                                <td class="msg-cell" title="<?= e($m['message']) ?>"><?= e($m['message']) ?></td>
                             </tr>
                         <?php endforeach; ?>
                         </tbody>
@@ -129,25 +129,25 @@ require_once __DIR__ . "/includes/navbar.php";
     <?php elseif ($view === 'users'): ?>
 
         <h2>Përdoruesit</h2>
-        <div class="form-card" style="overflow:auto;">
-            <table style="width:100%; border-collapse:collapse;">
+        <div class="table-wrap">
+            <table class="table">
                 <thead>
                 <tr>
-                    <th style="text-align:left; padding:8px;">ID</th>
-                    <th style="text-align:left; padding:8px;">Emri</th>
-                    <th style="text-align:left; padding:8px;">Email</th>
-                    <th style="text-align:left; padding:8px;">Role</th>
-                    <th style="text-align:left; padding:8px;">Krijuar</th>
+                    <th>ID</th>
+                    <th>Emri</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Krijuar</th>
                 </tr>
                 </thead>
                 <tbody>
                 <?php foreach ($users as $u): ?>
                     <tr>
-                        <td style="padding:8px;"><?= (int)$u['id'] ?></td>
-                        <td style="padding:8px;"><?= e($u['name']) ?></td>
-                        <td style="padding:8px;"><?= e($u['email']) ?></td>
-                        <td style="padding:8px;"><?= e($u['role']) ?></td>
-                        <td style="padding:8px;"><?= e((string)$u['created_at']) ?></td>
+                        <td><?= (int)$u['id'] ?></td>
+                        <td><?= e($u['name']) ?></td>
+                        <td><?= e($u['email']) ?></td>
+                        <td><span class="badge"><?= e($u['role']) ?></span></td>
+                        <td><?= e((string)$u['created_at']) ?></td>
                     </tr>
                 <?php endforeach; ?>
                 </tbody>
@@ -161,31 +161,32 @@ require_once __DIR__ . "/includes/navbar.php";
         <?php if (empty($messages)): ?>
             <p class="error-msg">Nuk ka ende mesazhe.</p>
         <?php else: ?>
-            <div class="form-card" style="overflow:auto;">
-                <table style="width:100%; border-collapse:collapse;">
+            <div class="table-wrap">
+                <table class="table">
                     <thead>
                     <tr>
-                        <th style="text-align:left; padding:8px;">ID</th>
-                        <th style="text-align:left; padding:8px;">Emri</th>
-                        <th style="text-align:left; padding:8px;">Email</th>
-                        <th style="text-align:left; padding:8px;">Mesazhi</th>
-                        <th style="text-align:left; padding:8px;">Data</th>
-                        <th style="text-align:left; padding:8px;">Veprime</th>
+                        <th>ID</th>
+                        <th>Emri</th>
+                        <th>Email</th>
+                        <th>Mesazhi</th>
+                        <th>Data</th>
+                        <th>Veprime</th>
                     </tr>
                     </thead>
                     <tbody>
                     <?php foreach ($messages as $m): ?>
                         <tr>
-                            <td style="padding:8px;"><?= (int)$m['id'] ?></td>
-                            <td style="padding:8px;"><?= e($m['name']) ?></td>
-                            <td style="padding:8px;"><?= e($m['email']) ?></td>
-                            <td style="padding:8px;"><?= e($m['message']) ?></td>
-                            <td style="padding:8px;"><?= e((string)$m['created_at']) ?></td>
-                            <td style="padding:8px;">
-                                <form method="POST" action="admin_message_delete.php" onsubmit="return confirm('A je i sigurt që do ta fshish këtë mesazh?');">
+                            <td><?= (int)$m['id'] ?></td>
+                            <td><?= e($m['name']) ?></td>
+                            <td><?= e($m['email']) ?></td>
+                            <td class="msg-cell" title="<?= e($m['message']) ?>"><?= e($m['message']) ?></td>
+                            <td><?= e((string)$m['created_at']) ?></td>
+                            <td>
+                                <form method="POST" action="admin_message_delete.php"
+                                      onsubmit="return confirm('A je i sigurt që do ta fshish këtë mesazh?');">
                                     <input type="hidden" name="csrf" value="<?= e($csrf) ?>">
                                     <input type="hidden" name="message_id" value="<?= (int)$m['id'] ?>">
-                                    <button type="submit" class="btn-secondary">Fshij</button>
+                                    <button type="submit" class="btn-danger">Fshij</button>
                                 </form>
                             </td>
                         </tr>
