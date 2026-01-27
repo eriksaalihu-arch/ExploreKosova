@@ -1,97 +1,123 @@
 <?php
-declare(strict_types=1);
-
 require_once __DIR__ . "/app/config/config.php";
 require_once __DIR__ . "/app/config/Database.php";
 require_once __DIR__ . "/app/helpers/auth.php";
-require_once __DIR__ . "/app/models/Tour.php";
-
-requireAdmin();
 
 if (session_status() === PHP_SESSION_NONE) session_start();
+requireAdmin();
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header("Location: " . BASE_URL . "/dashboard.php");
-    exit;
+  header("Location: dashboard.php?view=tours");
+  exit;
 }
 
-if (empty($_POST['csrf']) || empty($_SESSION['csrf']) || !hash_equals($_SESSION['csrf'], (string)$_POST['csrf'])) {
-    header("Location: " . BASE_URL . "/dashboard.php?err=CSRF");
-    exit;
+if (
+  empty($_POST['csrf']) ||
+  empty($_SESSION['csrf']) ||
+  !hash_equals($_SESSION['csrf'], $_POST['csrf'])
+) {
+  header("Location: admin_tour_form.php?error=" . urlencode("CSRF token gabim. Rifresko faqen dhe provo prapë."));
+  exit;
 }
 
-$id = (int)($_POST['id'] ?? 0);
-$title = trim((string)($_POST['title'] ?? ''));
-$short = trim((string)($_POST['short_description'] ?? ''));
-$content = trim((string)($_POST['content'] ?? ''));
+$pdo = Database::connection();
 
-if ($title === '' || $short === '' || $content === '') {
-    header("Location: " . BASE_URL . "/admin_tour_form.php?id={$id}&error=Ploteso+te+gjitha+fushat");
-    exit;
+function backToForm(int $id, string $msg): void {
+  $base = "admin_tour_form.php";
+  $q = $id > 0 ? "?id={$id}&" : "?";
+  header("Location: {$base}{$q}error=" . urlencode($msg));
+  exit;
 }
 
-$uploadImgDir = __DIR__ . "/uploads/images/";
-$uploadPdfDir = __DIR__ . "/uploads/pdfs/";
+$id = isset($_POST['id']) ? (int)$_POST['id'] : 0;
 
-if (!is_dir($uploadImgDir)) mkdir($uploadImgDir, 0777, true);
-if (!is_dir($uploadPdfDir)) mkdir($uploadPdfDir, 0777, true);
+$title = trim($_POST['title'] ?? '');
+$short = trim($_POST['short_description'] ?? '');
+$content = trim($_POST['content'] ?? '');
 
-$imagePath = null;
-$pdfPath = null;
+if (mb_strlen($title) < 3) backToForm($id, "Titulli duhet të ketë të paktën 3 karaktere.");
+if (mb_strlen($short) < 10) backToForm($id, "Përshkrimi i shkurtër duhet të ketë të paktën 10 karaktere.");
+if (mb_strlen($content) < 20) backToForm($id, "Përmbajtja duhet të ketë të paktën 20 karaktere.");
 
-// nëse është edit, ruaj path-at ekzistues nëse s’ngarkohet file i ri
-$existing = $id > 0 ? Tour::find($id) : null;
-if ($existing) {
-    $imagePath = $existing['image_path'] ?: null;
-    $pdfPath = $existing['pdf_path'] ?: null;
-}
-
-// upload image
-if (!empty($_FILES['image']['name'])) {
-    $ext = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
-    $allowed = ['jpg','jpeg','png','webp'];
-    if (!in_array($ext, $allowed, true)) {
-        header("Location: " . BASE_URL . "/admin_tour_form.php?id={$id}&error=Foto+jo+valide");
-        exit;
-    }
-    $filename = "tour_" . time() . "_" . bin2hex(random_bytes(4)) . "." . $ext;
-    move_uploaded_file($_FILES['image']['tmp_name'], $uploadImgDir . $filename);
-    $imagePath = BASE_URL . "/uploads/images/" . $filename;
-}
-
-// upload pdf
-if (!empty($_FILES['pdf']['name'])) {
-    $ext = strtolower(pathinfo($_FILES['pdf']['name'], PATHINFO_EXTENSION));
-    if ($ext !== 'pdf') {
-        header("Location: " . BASE_URL . "/admin_tour_form.php?id={$id}&error=PDF+jo+valid");
-        exit;
-    }
-    $filename = "tour_" . time() . "_" . bin2hex(random_bytes(4)) . ".pdf";
-    move_uploaded_file($_FILES['pdf']['tmp_name'], $uploadPdfDir . $filename);
-    $pdfPath = BASE_URL . "/uploads/pdfs/" . $filename;
-}
-
-$adminName = (string)($_SESSION['user']['name'] ?? 'admin');
-
+$existing = null;
 if ($id > 0) {
-    Tour::update($id, [
-        'title' => $title,
-        'short_description' => $short,
-        'content' => $content,
-        'image_path' => $imagePath,
-        'pdf_path' => $pdfPath,
-        'updated_by_name' => $adminName
-    ]);
-} else {
-    Tour::create([
-        'title' => $title,
-        'short_description' => $short,
-        'content' => $content,
-        'image_path' => $imagePath,
-        'pdf_path' => $pdfPath,
-        'created_by_name' => $adminName
-    ]);
+  $stmt = $pdo->prepare("SELECT * FROM tours WHERE id = ?");
+  $stmt->execute([$id]);
+  $existing = $stmt->fetch(PDO::FETCH_ASSOC);
+  if (!$existing) {
+    header("Location: dashboard.php?view=tours");
+    exit;
+  }
 }
 
-header("Location: " . BASE_URL . "/dashboard.php?ok=Tur+u+ruajt");
+$imagePath = $existing['image_path'] ?? null;
+$pdfPath   = $existing['pdf_path'] ?? null;
+
+$imgDir = __DIR__ . "/uploads/images/";
+$pdfDir = __DIR__ . "/uploads/pdfs/";
+
+if (!is_dir($imgDir) && !mkdir($imgDir, 0777, true)) backToForm($id, "Nuk u krijua folderi uploads/images.");
+if (!is_dir($pdfDir) && !mkdir($pdfDir, 0777, true)) backToForm($id, "Nuk u krijua folderi uploads/pdfs.");
+
+if (!is_writable($imgDir)) backToForm($id, "Folderi uploads/images nuk ka permission për shkrim.");
+if (!is_writable($pdfDir)) backToForm($id, "Folderi uploads/pdfs nuk ka permission për shkrim.");
+
+/* IMAGE */
+if (!empty($_FILES['image']['name']) && is_uploaded_file($_FILES['image']['tmp_name'])) {
+  $ext = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
+  $allowed = ['jpg', 'jpeg', 'png', 'webp'];
+  if (!in_array($ext, $allowed, true)) backToForm($id, "Foto lejohet vetëm: jpg, jpeg, png, webp.");
+
+  $name = "tour_" . time() . "_" . bin2hex(random_bytes(4)) . "." . $ext;
+  $target = $imgDir . $name;
+
+  if (!move_uploaded_file($_FILES['image']['tmp_name'], $target)) backToForm($id, "Nuk u arrit të ngarkohet fotoja.");
+
+  if (!empty($existing['image_path'])) {
+    $old = __DIR__ . "/" . ltrim($existing['image_path'], "/");
+    if (is_file($old)) @unlink($old);
+  }
+
+  // ✅ ruaj vetëm relative path (pa /ExploreKosova/)
+  $imagePath = "uploads/images/" . $name;
+}
+
+/* PDF */
+if (!empty($_FILES['pdf']['name']) && is_uploaded_file($_FILES['pdf']['tmp_name'])) {
+  $ext = strtolower(pathinfo($_FILES['pdf']['name'], PATHINFO_EXTENSION));
+  if ($ext !== 'pdf') backToForm($id, "Dokumenti lejohet vetëm PDF.");
+
+  $name = "tour_" . time() . "_" . bin2hex(random_bytes(4)) . ".pdf";
+  $target = $pdfDir . $name;
+
+  if (!move_uploaded_file($_FILES['pdf']['tmp_name'], $target)) backToForm($id, "Nuk u arrit të ngarkohet PDF.");
+
+  if (!empty($existing['pdf_path'])) {
+    $old = __DIR__ . "/" . ltrim($existing['pdf_path'], "/");
+    if (is_file($old)) @unlink($old);
+  }
+
+  $pdfPath = "uploads/pdfs/" . $name;
+}
+
+try {
+  if ($id > 0) {
+    $stmt = $pdo->prepare("
+      UPDATE tours
+      SET title = ?, short_description = ?, content = ?, image_path = ?, pdf_path = ?
+      WHERE id = ?
+    ");
+    $stmt->execute([$title, $short, $content, $imagePath, $pdfPath, $id]);
+  } else {
+    $stmt = $pdo->prepare("
+      INSERT INTO tours (title, short_description, content, image_path, pdf_path)
+      VALUES (?, ?, ?, ?, ?)
+    ");
+    $stmt->execute([$title, $short, $content, $imagePath, $pdfPath]);
+  }
+} catch (Throwable $e) {
+  backToForm($id, "DB gabim: " . $e->getMessage());
+}
+
+header("Location: dashboard.php?view=tours");
 exit;
