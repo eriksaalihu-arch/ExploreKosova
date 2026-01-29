@@ -108,6 +108,28 @@ ExploreKosova/
 ```
 ---
 
+## 📸 Screenshots
+
+### 🏠 Ballina
+![Ballina](screenshots/ballina.png)
+
+### 🔐 Login
+![Login](screenshots/login.png)
+
+### 📊 Admin Dashboard
+![Dashboard](screenshots/dashboard.png)
+
+### 🧭 Turet
+![Services](screenshots/services.png)
+
+### 📬 Contact Form
+![Contact](screenshots/contact.png)
+
+### 🫆 About
+![Contact](screenshots/about.png)
+
+---
+
 ## ⚙️ Instalimi Lokal (XAMPP)
 
 1. Kopjo folderin **ExploreKosova** në:
@@ -147,7 +169,7 @@ define('BASE_URL', 'http://localhost/ExploreKosova');
 
 ---
 
-### 👨🏻‍💻 Si të bëhet Admin një User
+### 👨🏻‍💻 Si të bëhet admin një user
  - Në phpMyAdmin ekzekuto:
 ```sql
 UPDATE users SET role = 'admin' WHERE email = 'email@example.com';
