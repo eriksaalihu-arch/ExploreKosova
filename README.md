@@ -75,35 +75,54 @@ ExploreKosova/
 │   ├── config/
 │   │   ├── config.php
 │   │   └── Database.php
-│   └── helpers/
-│       └── auth.php
+│   │
+│   ├── controllers/
+│   │   └── AuthController.php
+│   │
+│   ├── helpers/
+│   │   └── auth.php
+│   │
+│   └── models/
+│       ├── Tour.php
+│       └── User.php
 │
 ├── includes/
 │   ├── header.php
 │   ├── navbar.php
 │   └── footer.php
 │
+├── assets/
+│   ├── css/
+│   │   └── style.css
+│   │
+│   └── js/
+│       └── main.js
+│
 ├── uploads/
 │   ├── images/
 │   └── pdfs/
 │
-├── assets/
-│   └── style.css
+├── screenshots/
+│   ├── home.png
+│   ├── login.png
+│   ├── dashboard.png
+│   ├── tours.png
+│   └── contact.png
 │
-├── admin_user_delete.php
-├── admin_message_delete.php
-├── admin_tour_form.php
-├── admin_tour_save.php
-├── admin_tour_delete.php
-├── dashboard.php
-├── contact.php
-├── contact_submit.php
+├── index.php
 ├── services.php
 ├── service-details.php
+├── contact.php
+├── contact_submit.php
 ├── login.php
 ├── register.php
 ├── logout.php
-├── index.php
+├── dashboard.php
+├── admin_tour_form.php
+├── admin_tour_save.php
+├── admin_tour_delete.php
+├── admin_user_delete.php
+├── admin_message_delete.php
 └── README.md
 ```
 ---
