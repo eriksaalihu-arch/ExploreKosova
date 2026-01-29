@@ -690,3 +690,51 @@ main {
 .actions-cell form {
   margin: 0;
 }
+
+/* ===== ALERT MESSAGES (CONTACT PAGE) ===== */
+.alert {
+  max-width: 420px;
+  margin: 18px auto 0;
+  padding: 16px 18px;
+  border-radius: 14px;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  box-shadow: 0 12px 28px rgba(0,0,0,0.08);
+  animation: slideFade 0.4s ease;
+}
+
+.alert-success {
+  background: #ecfdf5;
+  border: 1px solid #6ee7b7;
+  color: #065f46;
+}
+
+.alert-icon {
+  font-size: 22px;
+  line-height: 1;
+}
+
+.alert-content strong {
+  font-size: 15px;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.alert-content p {
+  margin: 0;
+  font-size: 14px;
+  color: #065f46;
+}
+
+/* Animacion i lehtë */
+@keyframes slideFade {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -18,10 +18,14 @@ require_once __DIR__ . "/includes/navbar.php";
         <?php endif; ?>
 
         <?php if (!empty($_GET['success'])): ?>
-            <p class="success-msg" style="margin-top:10px;">
-                Mesazhi u dërgua me sukses.
-            </p>
-        <?php endif; ?>
+        <div class="alert alert-success">
+        <span class="alert-icon">✅</span>
+        <div class="alert-content">
+            <strong>Mesazhi u dërgua!</strong>
+            <p>Faleminderit që na kontaktuat. Do t’ju përgjigjemi sa më shpejt.</p>
+        </div>
+    </div>
+    <?php endif; ?>
     </section>
 
     <form
