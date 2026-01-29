@@ -75,6 +75,7 @@ require_once __DIR__ . "/includes/navbar.php";
   </div>
 
   <?php if ($view === 'overview'): ?>
+    <!-- ===== STATS ===== -->
     <section class="two-cols" style="padding:0; justify-content:center;">
       <div class="stat-card" style="max-width:500px; width:100%;">
         <h3>Totali i përdoruesve</h3>
@@ -95,6 +96,7 @@ require_once __DIR__ . "/includes/navbar.php";
       </div>
     </section>
 
+    <!-- ===== LATEST USERS + MESSAGES ===== -->
     <section class="two-cols" style="padding:0; justify-content:center; margin-top:18px;">
       <div class="dashboard-card" style="width:100%; max-width:820px;">
         <h3>Përdoruesit e fundit</h3>
@@ -147,6 +149,47 @@ require_once __DIR__ . "/includes/navbar.php";
       </div>
     </section>
 
+    <!-- ===== LATEST TOURS  ===== -->
+    <section class="two-cols" style="padding:0; justify-content:center; margin-top:18px;">
+      <div class="dashboard-card" style="width:100%; max-width:820px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:12px;">
+          <h3 style="margin:0;">Turet e fundit</h3>
+          <a class="btn-primary" href="admin_tour_form.php">Shto tur</a>
+        </div>
+
+        <div class="table-wrap" style="margin-top:12px;">
+          <table class="table" style="min-width:720px;">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Titulli</th>
+                <th>Përshkrimi</th>
+                <th>Data</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php if (empty($latestTours)): ?>
+                <tr>
+                  <td colspan="4" style="padding:18px;">
+                    <span class="badge">Nuk ka ende ture të regjistruara</span>
+                  </td>
+                </tr>
+              <?php else: ?>
+                <?php foreach ($latestTours as $t): ?>
+                  <tr>
+                    <td><?= (int)$t['id'] ?></td>
+                    <td><?= e($t['title']) ?></td>
+                    <td class="msg-cell"><?= e($t['short_description']) ?></td>
+                    <td><?= e($t['created_at']) ?></td>
+                  </tr>
+                <?php endforeach; ?>
+              <?php endif; ?>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </section>
   <?php endif; ?>
 
   <?php if ($view === 'users'): ?>
@@ -175,14 +218,16 @@ require_once __DIR__ . "/includes/navbar.php";
                 <td><?= e($u['created_at']) ?></td>
                 <td class="actions-cell">
                   <?php
-                    $isSelf = ((int)($_SESSION['user']['id'] ?? 0) === (int)$u['id']);
-                    $isAdmin = (string)$u['role'] === 'admin';
+                    $isSelf  = ((int)($_SESSION['user']['id'] ?? 0) === (int)$u['id']);
+                    $isAdmin = ((string)$u['role'] === 'admin');
                   ?>
 
                   <?php if ($isSelf || $isAdmin): ?>
                     <span class="badge">Nuk lejohet</span>
                   <?php else: ?>
-                    <form method="POST" action="admin_user_delete.php" onsubmit="return confirm('A je i sigurt që dëshiron ta fshish këtë përdorues?');" style="margin:0;">
+                    <form method="POST" action="admin_user_delete.php"
+                          onsubmit="return confirm('A je i sigurt që dëshiron ta fshish këtë përdorues?');"
+                          style="margin:0;">
                       <input type="hidden" name="csrf" value="<?= e($csrf) ?>">
                       <input type="hidden" name="user_id" value="<?= (int)$u['id'] ?>">
                       <button type="submit" class="btn-danger">Fshij</button>
@@ -222,7 +267,9 @@ require_once __DIR__ . "/includes/navbar.php";
                 <td class="msg-cell"><?= e($m['message']) ?></td>
                 <td><?= e($m['created_at']) ?></td>
                 <td class="actions-cell">
-                  <form method="POST" action="admin_message_delete.php" onsubmit="return confirm('A je i sigurt?');" style="margin:0;">
+                  <form method="POST" action="admin_message_delete.php"
+                        onsubmit="return confirm('A je i sigurt?');"
+                        style="margin:0;">
                     <input type="hidden" name="csrf" value="<?= e($csrf) ?>">
                     <input type="hidden" name="message_id" value="<?= (int)$m['id'] ?>">
                     <button type="submit" class="btn-danger">Fshij</button>
@@ -273,7 +320,7 @@ require_once __DIR__ . "/includes/navbar.php";
                     <a class="btn-danger"
                        href="admin_tour_delete.php?id=<?= (int)$t['id'] ?>&csrf=<?= e($csrf) ?>"
                        onclick="return confirm('A je i sigurt që dëshiron ta fshish këtë tur?')">
-                       Fshij
+                      Fshij
                     </a>
                   </td>
                 </tr>
