@@ -1,72 +1,74 @@
-🌍 ExploreKosova
+# 🌍 ExploreKosova
 
-ExploreKosova është një web aplikacion i zhvilluar në PHP për promovimin e tureve turistike në Kosovë.
+ExploreKosova është një web aplikacion i zhvilluar në PHP për promovimin e tureve turistike në Kosovë.  
 Platforma ofron informacione për ture, shërbime turistike, kontakt me vizitorët dhe një dashboard administrativ për menaxhim të plotë të përmbajtjes.
 
 Ky projekt është realizuar si projekt akademik me fokus në arkitekturë të mirë, siguri dhe dizajn modern.
 
-⸻
+---
 
-📌 Përshkrim i Projektit
+## 📌 Përshkrim i Projektit
 
 ExploreKosova synon të promovojë turizmin në Kosovë duke ofruar një platformë moderne ku vizitorët mund të:
-	•	Shikojnë ture turistike
-	•	Lexojnë për shërbimet
-	•	Kontaktojnë ekipin përmes contact form
+- Shikojnë ture turistike
+- Lexojnë për shërbimet
+- Kontaktojnë ekipin përmes contact form
 
-Administratorët kanë qasje në një Admin Dashboard për menaxhimin e përdoruesve, tureve dhe mesazheve.
+Administratorët kanë qasje në një **Admin Dashboard** për menaxhimin e përdoruesve, tureve dhe mesazheve.
 
-⸻
+---
 
-🛠️ Teknologjitë e Përdorura
-	•	PHP (PDO)
-	•	MySQL
-	•	HTML5
-	•	CSS3
-	•	JavaScript
-	•	XAMPP
-	•	phpMyAdmin
+## 🛠️ Teknologjitë e Përdorura
 
-⸻
+- PHP (PDO)
+- MySQL
+- HTML5
+- CSS3
+- JavaScript
+- XAMPP
+- phpMyAdmin
 
-🧱 Arkitektura e Projektit
-	•	Strukturë MVC-like
-	•	Kombinim OOP + Procedural PHP
-	•	PDO për komunikim të sigurt me databazën
-	•	Ndarje e logjikës nga prezantimi
-	•	Praktika bazë sigurie
+---
 
-⸻
+## 🧱 Arkitektura e Projektit
 
-⚙️ Funksionalitetet Kryesore
+- Strukturë **MVC-like**
+- Kombinim **OOP + Procedural PHP**
+- PDO për komunikim të sigurt me databazën
+- Ndarje e logjikës nga prezantimi
+- Praktika bazë sigurie
 
-Autentifikimi
-	•	Register
-	•	Login
-	•	Logout
-	•	Role: Admin / User
+---
 
-Menaxhimi i Tureve (Admin)
-	•	Shtim tur
-	•	Editim tur
-	•	Fshirje tur
-	•	Upload foto & PDF
+## ⚙️ Funksionalitetet Kryesore
 
-Contact Form
-	•	Dërgim mesazhesh nga vizitorët
-	•	Menaxhim i mesazheve nga admin dashboard
+### 👤 Autentifikimi
+- Register
+- Login
+- Logout
+- Role: Admin / User
 
-Admin Dashboard
-	•	Numri total i përdoruesve
-	•	Numri total i mesazheve
-	•	Numri total i tureve
-	•	Lista e fundit e përdoruesve
-	•	Lista e fundit e mesazheve
-	•	Lista e fundit e tureve
+### 🧭 Menaxhimi i Tureve (Admin)
+- Shtim tur
+- Editim tur
+- Fshirje tur
+- Upload foto & PDF
 
-⸻
+### 📬 Contact Form
+- Dërgim mesazhesh nga vizitorët
+- Menaxhim i mesazheve nga admin dashboard
 
-📁 Struktura e Projektit
+### 📊 Admin Dashboard
+- Numri total i përdoruesve
+- Numri total i mesazheve
+- Numri total i tureve
+- Lista e fundit e përdoruesve
+- Lista e fundit e mesazheve
+- Lista e fundit e tureve
+
+---
+
+## 📁 Struktura e Projektit
 
 ExploreKosova/
 ├── app/
@@ -75,15 +77,19 @@ ExploreKosova/
 │   │   └── Database.php
 │   └── helpers/
 │       └── auth.php
+│
 ├── includes/
 │   ├── header.php
 │   ├── navbar.php
 │   └── footer.php
+│
 ├── uploads/
 │   ├── images/
 │   └── pdfs/
+│
 ├── assets/
 │   └── style.css
+│
 ├── admin_user_delete.php
 ├── admin_message_delete.php
 ├── admin_tour_form.php
@@ -100,92 +106,45 @@ ExploreKosova/
 ├── index.php
 └── README.md
 
-⸻
+---
 
-⚙️ Instalimi Lokal (XAMPP)
+## ⚙️ Instalimi Lokal (XAMPP)
 
-1. Vendosja e Projektit
+1. Kopjo folderin **ExploreKosova** në:
+   - macOS: /Applications/XAMPP/xamppfiles/htdocs/
+   - Windows: C:\xampp\htdocs\
 
-Kopjo folderin ExploreKosova në:
+2. Hap **XAMPP Control Panel** dhe starto:
+   - Apache
+   - MySQL
 
-macOS:
-/Applications/XAMPP/xamppfiles/htdocs/ExploreKosova
+3. Hap shfletuesin dhe shko te:
+   - http://localhost/phpmyadmin
 
-Windows:
-C:\xampp\htdocs\ExploreKosova
+4. Krijo databazë me emrin:
+   - explore_kosova
 
-⸻
+5. Importo SQL file (nëse ekziston) ose krijo tabelat:
+   - users
+   - tours
+   - contact_messages
 
-2. Startimi i Shërbimeve
-	•	Hap XAMPP Control Panel
-	•	Start Apache
-	•	Start MySQL
+6. Konfiguro databazën në file-in:
+   - app/config/config.php
 
-⸻
+Shembull:
+```php
+define('DB_HOST', 'localhost');
+define('DB_NAME', 'explore_kosova');
+define('DB_USER', 'root');
+define('DB_PASS', '');
+define('BASE_URL', 'http://localhost/ExploreKosova');
 
-3. Krijimi i Databazës
-	•	Hap shfletuesin dhe shko te:
-http://localhost/phpmyadmin
-	•	Krijo databazë me emrin:
-explore_kosova
-	•	Krijo ose importo tabelat:
-	•	users
-	•	tours
-	•	contact_messages
+ 7. Hap projektin në shfletues:
+    - http://localhost/ExploreKosova
 
-⸻
+## 👨‍💻 Autorët
 
-4. Konfigurimi i Databazës
-
-Hap file-in:
-app/config/config.php
-
-Vendos:
-
-DB_HOST = localhost
-DB_NAME = explore_kosova
-DB_USER = root
-DB_PASS =
-BASE_URL = http://localhost/ExploreKosova
-
-⸻
-
-5. Si të bëhet një User Admin
-
-Në phpMyAdmin ekzekuto:
-
-UPDATE users
-SET role = ‘admin’
-WHERE email = ‘emaili_userit@example.com’;
-
-⸻
-
-🔐 Siguria
-	•	PDO Prepared Statements (mbrojtje nga SQL Injection)
-	•	CSRF Tokens për veprime kritike
-	•	Validim inputesh
-	•	Sanitizim i output-it (XSS protection)
-
-⸻
-
-🖼️ Screenshots
-
-Screenshots të aplikacionit:
-	•	Ballina
-	•	Rreth Nesh
-	•	Shërbimet
-	•	Kontakt
-	•	Login / Register
-	•	Admin Dashboard
-	•	Menaxhimi i Tureve
-
-⸻
-
-👨‍💻 Autorët e Projektit
-	•	Erik Salihu – ID: 242574387
-	•	Jasin Krasniqi
-	•	Meris Misini
-
-⸻
-
-© 2025 ExploreKosova – Të gjitha të drejtat e rezervuara
+- Erik Salihu
+- Jasin Krasniqi
+- Meris Misini
