@@ -677,3 +677,16 @@ main {
   background: #374151;
   transform: translateY(-2px);
 }
+
+/* Buttons ne qender brenda kolonës "Veprime" */
+.actions-cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap;
+}
+
+.actions-cell form {
+  margin: 0;
+}
