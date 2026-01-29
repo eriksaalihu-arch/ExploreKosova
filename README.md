@@ -105,7 +105,7 @@ ExploreKosova/
 ├── logout.php
 ├── index.php
 └── README.md
-
+```
 ---
 
 ## ⚙️ Instalimi Lokal (XAMPP)
@@ -139,14 +139,37 @@ define('DB_NAME', 'explore_kosova');
 define('DB_USER', 'root');
 define('DB_PASS', '');
 define('BASE_URL', 'http://localhost/ExploreKosova');
-
+```
 ---
 
 7. Hap projektin në shfletues:
    - http://localhost/ExploreKosova
+
+---
+
+### 👑 Si të bëhet Admin një User
+ - Në phpMyAdmin ekzekuto:
+```sql
+UPDATE users SET role = 'admin' WHERE email = 'email@example.com';
+```
+---
+
+### 🔐 Siguria
+- PDO prepared statements (mbrojtje ndaj SQL Injection)
+- CSRF tokens për veprimet sensitive
+- Password hashing
+- Kontroll i roleve për qasje në dashboard
+
+---
 
 ## 👨‍💻 Autorët
 
 - Erik Salihu
 - Jasin Krasniqi
 - Meris Misini
+
+---
+
+### 📄 Licenca
+- Ky projekt është zhvilluar për qëllime akademike.
+
