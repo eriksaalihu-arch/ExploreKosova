@@ -147,7 +147,7 @@ define('BASE_URL', 'http://localhost/ExploreKosova');
 
 ---
 
-### 👑 Si të bëhet Admin një User
+### 👨🏻‍💻 Si të bëhet Admin një User
  - Në phpMyAdmin ekzekuto:
 ```sql
 UPDATE users SET role = 'admin' WHERE email = 'email@example.com';
