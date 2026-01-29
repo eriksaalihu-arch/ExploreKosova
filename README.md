@@ -69,7 +69,7 @@ Administratorët kanë qasje në një **Admin Dashboard** për menaxhimin e për
 ---
 
 ## 📁 Struktura e Projektit
-
+```text
 ExploreKosova/
 ├── app/
 │   ├── config/
@@ -140,8 +140,10 @@ define('DB_USER', 'root');
 define('DB_PASS', '');
 define('BASE_URL', 'http://localhost/ExploreKosova');
 
- 7. Hap projektin në shfletues:
-    - http://localhost/ExploreKosova
+---
+
+7. Hap projektin në shfletues:
+   - http://localhost/ExploreKosova
 
 ## 👨‍💻 Autorët
 
