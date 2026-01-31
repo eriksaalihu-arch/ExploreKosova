@@ -896,3 +896,35 @@ main {
     grid-template-columns: 1fr;
   }
 }
+
+/* ========================= Admin Pages Alerts Center ========================= */
+
+.success-wrapper{
+  display:flex;
+  justify-content:center;
+  margin: 16px 0 0;
+}
+
+.success-message,
+.error-message{
+  max-width: 760px;
+  width: 100%;
+  text-align: center;
+  border-radius: 16px;
+  padding: 18px 22px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+}
+
+.success-message strong,
+.error-message strong{
+  display:block;
+  font-size: 20px;
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+
+.success-message p,
+.error-message p{
+  margin: 0;
+  opacity: .85;
+}

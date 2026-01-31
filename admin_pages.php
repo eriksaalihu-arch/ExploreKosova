@@ -30,19 +30,23 @@ require_once __DIR__ . "/includes/navbar.php";
     <p>Vetëm administratori mund ta përditësojë Ballinën dhe faqen “Rreth Nesh”.</p>
 
     <?php if (!empty($_GET['success'])): ?>
-      <div class="alert alert-success">
-        <div class="alert-content">
-          <strong>U ruajt me sukses</strong>
-          <p>Përmbajtja u përditësua.</p>
+      <div class="success-wrapper">
+        <div class="alert alert-success success-message">
+          <div class="alert-content">
+            <strong>U ruajt me sukses</strong>
+            <p>Përmbajtja u përditësua.</p>
+          </div>
         </div>
       </div>
     <?php endif; ?>
 
     <?php if (!empty($_GET['error'])): ?>
-      <div class="alert" style="background:#fef2f2;border:1px solid #fecaca;color:#991b1b;">
-        <div class="alert-content">
-          <strong>Gabim</strong>
-          <p><?= e((string)$_GET['error']) ?></p>
+      <div class="success-wrapper">
+        <div class="alert error-message" style="background:#fef2f2;border:1px solid #fecaca;color:#991b1b;">
+          <div class="alert-content">
+            <strong>Gabim</strong>
+            <p><?= e((string)$_GET['error']) ?></p>
+          </div>
         </div>
       </div>
     <?php endif; ?>
