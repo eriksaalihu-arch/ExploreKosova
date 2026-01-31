@@ -127,7 +127,8 @@ ExploreKosova/
 │   │   └── auth.php
 │   │
 │   └── models/
-│       ├── Tour.php
+│       ├── PageContent.php
+│       └── Tour.php
 │       └── User.php
 │
 ├── includes/
