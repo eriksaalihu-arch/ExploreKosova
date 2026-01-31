@@ -740,62 +740,99 @@ main {
   }
 }
 
-/* Card për menaxhimin e faqeve */
-.page-manage-card {
-  background: #ffffff;
-  border-radius: var(--radius);
-  padding: 22px;
-  box-shadow: var(--shadow);
-  text-align: center;
+/* ========================= Admin Pages (Dashboard) ========================= */
+
+.page-manage-card{
+  border: 1px solid rgba(0,0,0,0.06);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.06);
 }
 
-.page-manage-card h3 {
-  margin-top: 0;
-  font-size: 20px;
-  color: var(--text-dark);
+.page-manage-top{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:16px;
+  margin-bottom:14px;
 }
 
-.page-manage-card p {
-  color: var(--text-light);
-  font-size: 14px;
-  margin: 10px 0 18px;
+.page-manage-sub{
+  margin:6px 0 0;
+  opacity:.75;
+  line-height:1.45;
 }
 
-.page-manage-actions {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 14px;
-  flex-wrap: wrap;
+.page-admin-badge{
+  background: rgba(0,0,0,0.06);
+  color:#111;
+  padding:8px 12px;
+  border-radius:999px;
+  font-weight:600;
+  white-space:nowrap;
 }
 
-.btn-admin {
-  background: var(--primary);
-  color: #ffffff;
-  padding: 10px 18px;
-  border-radius: var(--radius-sm);
-  text-decoration: none;
-  font-size: 14px;
-  font-weight: 600;
-  transition: all 0.25s ease;
+.page-manage-grid{
+  display:grid;
+  grid-template-columns: repeat(2, minmax(0,1fr));
+  gap:14px;
 }
 
-.btn-admin:hover {
-  background: var(--primary-dark);
+.page-card{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  padding:16px 16px;
+  border-radius:14px;
+  border: 1px solid rgba(0,0,0,0.08);
+  background: #fff;
+  text-decoration:none;
+  transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+}
+
+.page-card:hover{
   transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.08);
+  border-color: rgba(0,0,0,0.14);
 }
 
-.dashboard-section {
-  margin-top: 24px;
+.page-card-icon{
+  width:46px;
+  height:46px;
+  border-radius:14px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background: rgba(44, 108, 255, 0.10);
+  font-size:20px;
+  flex: 0 0 auto;
 }
 
-@media (max-width: 768px) {
-  .page-manage-card {
-    padding: 18px;
-  }
+.page-card-body{
+  flex:1;
+  min-width: 0;
+}
 
-  .page-manage-actions {
-    flex-direction: column;
-    gap: 10px;
+.page-card-title{
+  font-weight:800;
+  color:#111;
+  margin-bottom:4px;
+}
+
+.page-card-desc{
+  opacity:.72;
+  font-size:14px;
+  line-height:1.35;
+}
+
+.page-card-cta{
+  font-weight:800;
+  color:#2c6cff;
+  flex: 0 0 auto;
+}
+
+/* Responsive */
+@media (max-width: 900px){
+  .page-manage-grid{
+    grid-template-columns: 1fr;
   }
 }

@@ -76,6 +76,7 @@ require_once __DIR__ . "/includes/navbar.php";
   </div>
 
   <?php if ($view === 'overview'): ?>
+
     <!-- ===== STATS ===== -->
     <section class="two-cols" style="padding:0; justify-content:center;">
       <div class="stat-card" style="max-width:500px; width:100%;">
@@ -94,6 +95,41 @@ require_once __DIR__ . "/includes/navbar.php";
         <h3>Totali i tureve</h3>
         <div style="font-size:38px; font-weight:800; margin:6px 0 12px;"><?= $totalTours ?></div>
         <a class="btn-secondary" href="dashboard.php?view=tours">Shiko turet</a>
+      </div>
+    </section>
+
+    <!-- ✅ NEW: PAGE MANAGEMENT (OVERVIEW) - MODERN CARD -->
+    <section class="two-cols" style="padding:0; justify-content:center; margin-top:18px;">
+      <div class="dashboard-card page-manage-card" style="width:100%; max-width:1100px;">
+        <div class="page-manage-top">
+          <div>
+            <h3 style="margin:0;">Menaxhimi i faqeve</h3>
+            <p class="page-manage-sub">
+              Përditëso përmbajtjen dinamike të <b>Ballinës</b> dhe faqes <b>“Rreth Nesh”</b> nga databaza.
+            </p>
+          </div>
+          <span class="badge page-admin-badge">Vetëm Admin</span>
+        </div>
+
+        <div class="page-manage-grid">
+          <a class="page-card" href="admin_pages.php?page=home">
+            <div class="page-card-icon">🏠</div>
+            <div class="page-card-body">
+              <div class="page-card-title">Ballina</div>
+              <div class="page-card-desc">Edito titullin, tekstin dhe pjesët kryesore që shfaqen në Home.</div>
+            </div>
+            <div class="page-card-cta">Edito →</div>
+          </a>
+
+          <a class="page-card" href="admin_pages.php?page=about">
+            <div class="page-card-icon">ℹ️</div>
+            <div class="page-card-body">
+              <div class="page-card-title">Rreth Nesh</div>
+              <div class="page-card-desc">Përditëso misionin, vlerat dhe përmbajtjen e faqes About.</div>
+            </div>
+            <div class="page-card-cta">Edito →</div>
+          </a>
+        </div>
       </div>
     </section>
 
@@ -334,20 +370,35 @@ require_once __DIR__ . "/includes/navbar.php";
   <?php endif; ?>
 
   <?php if ($view === 'pages'): ?>
-    <section class="dashboard-card" style="max-width:980px; margin:0 auto;">
-      <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px;">
+    <section class="dashboard-card page-manage-card" style="max-width:1100px; margin:0 auto;">
+      <div class="page-manage-top">
         <div>
           <h2 style="margin:0;">Menaxhimi i faqeve</h2>
-          <p style="margin:6px 0 0; opacity:.75;">
-            Përditëso përmbajtjen dinamike të Ballinës dhe faqes “Rreth Nesh” nga databaza.
+          <p class="page-manage-sub">
+            Përditëso përmbajtjen dinamike të <b>Ballinës</b> dhe faqes <b>“Rreth Nesh”</b> nga databaza.
           </p>
         </div>
-        <span class="badge">Vetëm Admin</span>
+        <span class="badge page-admin-badge">Vetëm Admin</span>
       </div>
 
-      <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:14px;">
-        <a class="btn-secondary" href="admin_pages.php?page=home">Edito Ballinën</a>
-        <a class="btn-secondary" href="admin_pages.php?page=about">Edito Rreth Nesh</a>
+      <div class="page-manage-grid">
+        <a class="page-card" href="admin_pages.php?page=home">
+          <div class="page-card-icon">🏠</div>
+          <div class="page-card-body">
+            <div class="page-card-title">Ballina</div>
+            <div class="page-card-desc">Edito titullin, tekstin dhe seksionet kryesore në Home.</div>
+          </div>
+          <div class="page-card-cta">Edito →</div>
+        </a>
+
+        <a class="page-card" href="admin_pages.php?page=about">
+          <div class="page-card-icon">ℹ️</div>
+          <div class="page-card-body">
+            <div class="page-card-title">Rreth Nesh</div>
+            <div class="page-card-desc">Përditëso misionin, vlerat dhe përmbajtjen e faqes About.</div>
+          </div>
+          <div class="page-card-cta">Edito →</div>
+        </a>
       </div>
     </section>
   <?php endif; ?>
