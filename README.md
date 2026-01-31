@@ -68,6 +68,50 @@ Administratorët kanë qasje në një **Admin Dashboard** për menaxhimin e për
 
 ---
 
+## 📝 Menaxhimi i Përmbajtjes së Faqeve (CMS)
+
+Projekti **ExploreKosova** përfshin një sistem të thjeshtë **CMS (Content Management System)** që lejon **vetëm administratorin** të menaxhojë përmbajtjen e faqeve kryesore:
+
+- **Ballina (Home)**
+- **Rreth Nesh (About Us)**
+
+Ky funksionalitet mundëson që përmbajtja e faqeve të mos jetë statike, por të lexohet dhe përditësohet drejtpërdrejt nga databaza.
+
+### 🔐 Akses & Siguri
+- Vetëm përdoruesit me rol **Admin** kanë qasje
+- I mbrojtur me:
+  - Session-based authentication
+  - CSRF Token
+  - PDO Prepared Statements
+
+### ⚙️ Funksionalitetet Kryesore
+#### 🏠 Ballina (Home)
+Administratori mund të përditësojë:
+- Titullin kryesor (Hero Title)
+- Nëntitullin (Hero Subtitle)
+- Tekstin dhe linkun e butonit kryesor
+- Titullin e seksionit informues
+- Kartat informuese (titull, tekst, foto)
+
+#### ℹ️ Rreth Nesh (About Us)
+Administratori mund të përditësojë:
+- Titullin e faqes
+- Nëntitullin
+- Seksionet informative (misioni, vlerat, kush jemi, çfarë ofrojmë)
+
+### 🖥️ Paneli Administrativ
+Menaxhimi i faqeve realizohet përmes:
+- **Admin Dashboard → Menaxho Faqet**
+- Ndërfaqe moderne me karta (cards)
+- Mesazhe suksesi/gabimi të qendërzuara për feedback vizual
+
+### 📦 Ruajtja e të Dhënave
+- Përmbajtja ruhet në databazë (JSON për strukturat komplekse)
+- Lejon përditësime të shpejta pa ndryshuar kodin burimor
+   - Ky modul e bën projektin më fleksibël, më profesional dhe më afër një aplikacioni real web.
+
+---
+
 ## 📁 Struktura e Projektit
 ```text
 ExploreKosova/
@@ -123,6 +167,8 @@ ExploreKosova/
 ├── admin_tour_delete.php
 ├── admin_user_delete.php
 ├── admin_message_delete.php
+├── admin_pages.php
+├── admin_pages_save.php
 └── README.md
 ```
 ---
