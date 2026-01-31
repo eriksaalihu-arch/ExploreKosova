@@ -72,8 +72,7 @@ require_once __DIR__ . "/includes/navbar.php";
     <a href="dashboard.php?view=users" class="<?= $view === 'users' ? 'active' : '' ?>">Përdoruesit</a>
     <a href="dashboard.php?view=messages" class="<?= $view === 'messages' ? 'active' : '' ?>">Mesazhet</a>
     <a href="dashboard.php?view=tours" class="<?= $view === 'tours' ? 'active' : '' ?>">Turet</a>
-    <!-- NEW: Menaxhimi i faqeve (Home + About) -->
-    <a href="admin_pages.php?page=home" class="<?= $view === 'pages' ? 'active' : '' ?>">Menaxho Faqet</a>
+    <a href="dashboard.php?view=pages" class="<?= $view === 'pages' ? 'active' : '' ?>">Menaxho Faqet</a>
   </div>
 
   <?php if ($view === 'overview'): ?>
@@ -95,20 +94,6 @@ require_once __DIR__ . "/includes/navbar.php";
         <h3>Totali i tureve</h3>
         <div style="font-size:38px; font-weight:800; margin:6px 0 12px;"><?= $totalTours ?></div>
         <a class="btn-secondary" href="dashboard.php?view=tours">Shiko turet</a>
-      </div>
-    </section>
-
-    <!-- ===== QUICK ACTION: PAGES MANAGEMENT ===== -->
-    <section class="two-cols" style="padding:0; justify-content:center; margin-top:18px;">
-      <div class="dashboard-card" style="width:100%; max-width:820px; text-align:center;">
-        <h3 style="margin-top:0;">Menaxhimi i faqeve (Ballina & Rreth Nesh)</h3>
-        <p style="color:#555; margin:0 0 14px;">
-          Përditëso përmbajtjen dinamike të Ballinës dhe faqes “Rreth Nesh” nga databaza.
-        </p>
-        <div class="actions-cell" style="justify-content:center;">
-          <a class="btn-secondary" href="admin_pages.php?page=home">Edito Ballinën</a>
-          <a class="btn-secondary" href="admin_pages.php?page=about">Edito Rreth Nesh</a>
-        </div>
       </div>
     </section>
 
@@ -344,6 +329,25 @@ require_once __DIR__ . "/includes/navbar.php";
             <?php endif; ?>
           </tbody>
         </table>
+      </div>
+    </section>
+  <?php endif; ?>
+
+  <?php if ($view === 'pages'): ?>
+    <section class="dashboard-card" style="max-width:980px; margin:0 auto;">
+      <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px;">
+        <div>
+          <h2 style="margin:0;">Menaxhimi i faqeve</h2>
+          <p style="margin:6px 0 0; opacity:.75;">
+            Përditëso përmbajtjen dinamike të Ballinës dhe faqes “Rreth Nesh” nga databaza.
+          </p>
+        </div>
+        <span class="badge">Vetëm Admin</span>
+      </div>
+
+      <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:14px;">
+        <a class="btn-secondary" href="admin_pages.php?page=home">Edito Ballinën</a>
+        <a class="btn-secondary" href="admin_pages.php?page=about">Edito Rreth Nesh</a>
       </div>
     </section>
   <?php endif; ?>
