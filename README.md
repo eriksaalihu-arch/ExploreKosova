@@ -150,7 +150,7 @@ ExploreKosova/
 ├── screenshots/
 │   ├── home.png
 │   ├── login.png
-│   ├── dashboard.png
+│   ├── admin_dashboard.png
 │   ├── tours.png
 │   └── contact.png
 │
