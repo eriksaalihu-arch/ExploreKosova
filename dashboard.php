@@ -72,6 +72,8 @@ require_once __DIR__ . "/includes/navbar.php";
     <a href="dashboard.php?view=users" class="<?= $view === 'users' ? 'active' : '' ?>">Përdoruesit</a>
     <a href="dashboard.php?view=messages" class="<?= $view === 'messages' ? 'active' : '' ?>">Mesazhet</a>
     <a href="dashboard.php?view=tours" class="<?= $view === 'tours' ? 'active' : '' ?>">Turet</a>
+    <!-- NEW: Menaxhimi i faqeve (Home + About) -->
+    <a href="admin_pages.php?page=home" class="<?= $view === 'pages' ? 'active' : '' ?>">Menaxho Faqet</a>
   </div>
 
   <?php if ($view === 'overview'): ?>
@@ -93,6 +95,20 @@ require_once __DIR__ . "/includes/navbar.php";
         <h3>Totali i tureve</h3>
         <div style="font-size:38px; font-weight:800; margin:6px 0 12px;"><?= $totalTours ?></div>
         <a class="btn-secondary" href="dashboard.php?view=tours">Shiko turet</a>
+      </div>
+    </section>
+
+    <!-- ===== QUICK ACTION: PAGES MANAGEMENT ===== -->
+    <section class="two-cols" style="padding:0; justify-content:center; margin-top:18px;">
+      <div class="dashboard-card" style="width:100%; max-width:820px; text-align:center;">
+        <h3 style="margin-top:0;">Menaxhimi i faqeve (Ballina & Rreth Nesh)</h3>
+        <p style="color:#555; margin:0 0 14px;">
+          Përditëso përmbajtjen dinamike të Ballinës dhe faqes “Rreth Nesh” nga databaza.
+        </p>
+        <div class="actions-cell" style="justify-content:center;">
+          <a class="btn-secondary" href="admin_pages.php?page=home">Edito Ballinën</a>
+          <a class="btn-secondary" href="admin_pages.php?page=about">Edito Rreth Nesh</a>
+        </div>
       </div>
     </section>
 
