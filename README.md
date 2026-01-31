@@ -136,7 +136,7 @@ ExploreKosova/
 ![Login](screenshots/login.png)
 
 ### 📊 Admin Dashboard
-![Dashboard](screenshots/dashboard.png)
+![Dashboard](screenshots/admin_dashboard.png)
 
 ### 🧭 Turet
 ![Services](screenshots/services.png)
