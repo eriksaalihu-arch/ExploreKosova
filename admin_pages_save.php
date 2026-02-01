@@ -15,7 +15,10 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-if (empty($_POST['csrf']) || empty($_SESSION['csrf']) || !hash_equals($_SESSION['csrf'], (string)$_POST['csrf'])) {
+if (
+    empty($_POST['csrf']) || empty($_SESSION['csrf']) ||
+    !hash_equals((string)$_SESSION['csrf'], (string)$_POST['csrf'])
+) {
     header("Location: admin_pages.php?page=home&error=" . urlencode("CSRF token gabim"));
     exit;
 }
@@ -27,12 +30,34 @@ $updatedBy = (string)($_SESSION['user']['name'] ?? 'admin');
 
 function clean(string $v): string { return trim($v); }
 
+function isLikelyUrl(string $v): bool {
+    if ($v === '') return false;
+    return (bool)filter_var($v, FILTER_VALIDATE_URL);
+}
+
 if ($page === 'home') {
     $heroTitle = clean((string)($_POST['hero_title'] ?? ''));
     $heroSub   = clean((string)($_POST['hero_subtitle'] ?? ''));
     $btnText   = clean((string)($_POST['hero_button_text'] ?? ''));
     $btnLink   = clean((string)($_POST['hero_button_link'] ?? 'services.php'));
     $whyTitle  = clean((string)($_POST['why_title'] ?? ''));
+
+    $sliderImages = $_POST['slider_image'] ?? [];
+    $sliderTitles = $_POST['slider_title'] ?? [];
+    $sliderTexts  = $_POST['slider_text'] ?? [];
+
+    $slider = [];
+    for ($i=0; $i<3; $i++) {
+        $img = clean((string)($sliderImages[$i] ?? ''));
+        $ttl = clean((string)($sliderTitles[$i] ?? ''));
+        $txt = clean((string)($sliderTexts[$i] ?? ''));
+
+        $slider[] = [
+            'image' => $img,
+            'title' => $ttl,
+            'text'  => $txt,
+        ];
+    }
 
     $cardTitles = $_POST['card_title'] ?? [];
     $cardTexts  = $_POST['card_text'] ?? [];
@@ -47,9 +72,32 @@ if ($page === 'home') {
         ];
     }
 
-    if (mb_strlen($heroTitle) < 3 || mb_strlen($heroSub) < 5 || mb_strlen($btnText) < 2 || mb_strlen($whyTitle) < 3) {
-        header("Location: admin_pages.php?page=home&error=" . urlencode("Plotëso të gjitha fushat e Home."));
+    if (
+        mb_strlen($heroTitle) < 3 ||
+        mb_strlen($heroSub) < 5 ||
+        mb_strlen($btnText) < 2 ||
+        mb_strlen($whyTitle) < 3
+    ) {
+        header("Location: admin_pages.php?page=home&error=" . urlencode("Plotëso të gjitha fushat kryesore të Home."));
         exit;
+    }
+
+    for ($i=0; $i<3; $i++) {
+        if (!isLikelyUrl((string)$slider[$i]['image'])) {
+            header("Location: admin_pages.php?page=home&error=" . urlencode("Vendos URL të vlefshme për foton e Slide " . ($i+1) . "."));
+            exit;
+        }
+    }
+
+    for ($i=0; $i<3; $i++) {
+        if (mb_strlen((string)$cards[$i]['title']) < 2 || mb_strlen((string)$cards[$i]['text']) < 2) {
+            header("Location: admin_pages.php?page=home&error=" . urlencode("Plotëso titullin dhe tekstin për Card " . ($i+1) . "."));
+            exit;
+        }
+        if (!isLikelyUrl((string)$cards[$i]['image'])) {
+            header("Location: admin_pages.php?page=home&error=" . urlencode("Vendos URL të vlefshme për foton e Card " . ($i+1) . "."));
+            exit;
+        }
     }
 
     $data = [
@@ -58,6 +106,7 @@ if ($page === 'home') {
         'hero_button_text' => $btnText,
         'hero_button_link' => $btnLink,
         'why_title' => $whyTitle,
+        'slider' => $slider, 
         'cards' => $cards,
     ];
 
@@ -66,7 +115,7 @@ if ($page === 'home') {
     exit;
 }
 
-/* ABOUT */
+/* ========================= ABOUT ========================= */
 $pageTitle = clean((string)($_POST['page_title'] ?? ''));
 $pageSub   = clean((string)($_POST['page_subtitle'] ?? ''));
 
@@ -84,6 +133,13 @@ for ($i=0; $i<4; $i++) {
 if (mb_strlen($pageTitle) < 3 || mb_strlen($pageSub) < 5) {
     header("Location: admin_pages.php?page=about&error=" . urlencode("Plotëso titullin dhe përshkrimin e About."));
     exit;
+}
+
+for ($i=0; $i<4; $i++) {
+    if (mb_strlen((string)$sections[$i]['title']) < 2 || mb_strlen((string)$sections[$i]['text']) < 3) {
+        header("Location: admin_pages.php?page=about&error=" . urlencode("Plotëso të gjitha fushat për Seksionin " . ($i+1) . "."));
+        exit;
+    }
 }
 
 PageContent::saveBySlug('about', [
