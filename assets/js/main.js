@@ -118,14 +118,33 @@ if (registerForm) {
   });
 }
 
-/* ===================== ERROR DISAPPEAR AFTER 4 SEC ===================== */
-const alertBox = document.querySelector(".auth-alert");
-if (alertBox) {
-  setTimeout(() => {
-    alertBox.style.opacity = "0";
-    setTimeout(() => alertBox.remove(), 400);
-  }, 4000);
-}
+// ===================== AUTO HIDE ALERTS =====================
+(() => {
+  const ALERT_SELECTORS = [
+    ".auth-alert",
+    ".alert",
+    ".success-message",
+    ".error-message"
+  ];
+
+  const alerts = document.querySelectorAll(ALERT_SELECTORS.join(","));
+
+  if (!alerts.length) return;
+
+  alerts.forEach(alert => {
+    // sigurohemi që fade-out funksionon bukur
+    alert.style.transition = "opacity .4s ease, transform .4s ease";
+
+    setTimeout(() => {
+      alert.style.opacity = "0";
+      alert.style.transform = "translateY(-6px)";
+
+      setTimeout(() => {
+        alert.remove();
+      }, 400);
+    }, 4000);
+  });
+})();
 
 // ========================= Hero Slider =========================
 (function () {
