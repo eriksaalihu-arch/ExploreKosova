@@ -127,50 +127,61 @@ if (alertBox) {
   }, 4000);
 }
 
-/* ===================== SLIDERI ===================== */
-
+// ========================= Hero Slider =========================
 (function () {
-  const root = document.getElementById("ek-slider");
+  const root = document.getElementById("ek-hero-slider");
   if (!root) return;
 
-  const track = root.querySelector(".slider-track");
-  const slides = Array.from(root.querySelectorAll(".slide"));
-  const prevBtn = root.querySelector(".slider-btn.prev");
-  const nextBtn = root.querySelector(".slider-btn.next");
-  const dotsWrap = root.querySelector(".slider-dots");
+  const slides = Array.from(root.querySelectorAll(".hero-slide"));
+  const btnPrev = root.querySelector(".hero-btn.prev");
+  const btnNext = root.querySelector(".hero-btn.next");
+  const dotsWrap = root.querySelector(".hero-dots");
 
-  let index = 0;
-  let timer = null;
-  const AUTOPLAY_MS = 4000;
+  if (slides.length <= 1) return;
 
-  slides.forEach((_, i) => {
-    const b = document.createElement("button");
-    b.type = "button";
-    b.className = "slider-dot" + (i === 0 ? " active" : "");
-    b.setAttribute("aria-label", "Shko te slide " + (i + 1));
-    b.addEventListener("click", () => goTo(i, true));
-    dotsWrap.appendChild(b);
+  let index = slides.findIndex(s => s.classList.contains("is-active"));
+  if (index < 0) index = 0;
+
+  const dots = slides.map((_, i) => {
+    const d = document.createElement("button");
+    d.type = "button";
+    d.className = "hero-dot" + (i === index ? " is-active" : "");
+    d.setAttribute("aria-label", `Shko te slide ${i + 1}`);
+    d.addEventListener("click", () => goTo(i, true));
+    dotsWrap && dotsWrap.appendChild(d);
+    return d;
   });
 
-  const dots = Array.from(dotsWrap.querySelectorAll(".slider-dot"));
-
-  function update() {
-    track.style.transform = `translateX(-${index * 100}%)`;
-    dots.forEach((d, i) => d.classList.toggle("active", i === index));
+  function render() {
+    slides.forEach((s, i) => s.classList.toggle("is-active", i === index));
+    dots.forEach((d, i) => d.classList.toggle("is-active", i === index));
   }
 
   function goTo(i, userAction = false) {
     index = (i + slides.length) % slides.length;
-    update();
+    render();
     if (userAction) restartAutoplay();
   }
 
-  function next() { goTo(index + 1, true); }
-  function prev() { goTo(index - 1, true); }
+  function next(userAction = false) {
+    goTo(index + 1, userAction);
+  }
+
+  function prev(userAction = false) {
+    goTo(index - 1, userAction);
+  }
+
+  btnNext && btnNext.addEventListener("click", () => next(true));
+  btnPrev && btnPrev.addEventListener("click", () => prev(true));
+
+  const autoplay = root.dataset.autoplay === "1";
+  const interval = parseInt(root.dataset.interval || "5000", 10);
+  let timer = null;
 
   function startAutoplay() {
+    if (!autoplay) return;
     stopAutoplay();
-    timer = setInterval(() => goTo(index + 1, false), AUTOPLAY_MS);
+    timer = setInterval(() => next(false), interval);
   }
 
   function stopAutoplay() {
@@ -178,10 +189,10 @@ if (alertBox) {
     timer = null;
   }
 
-  function restartAutoplay() { startAutoplay(); }
-
-  nextBtn && nextBtn.addEventListener("click", next);
-  prevBtn && prevBtn.addEventListener("click", prev);
+  function restartAutoplay() {
+    stopAutoplay();
+    startAutoplay();
+  }
 
   root.addEventListener("mouseenter", stopAutoplay);
   root.addEventListener("mouseleave", startAutoplay);
@@ -193,10 +204,12 @@ if (alertBox) {
 
   root.addEventListener("touchend", (e) => {
     const endX = e.changedTouches[0].clientX;
-    const dx = endX - startX;
-    if (Math.abs(dx) > 45) dx < 0 ? next() : prev();
-  });
+    const diff = endX - startX;
+    if (Math.abs(diff) > 40) {
+      diff < 0 ? next(true) : prev(true);
+    }
+  }, { passive: true });
 
-  update();
+  render();
   startAutoplay();
 })();
