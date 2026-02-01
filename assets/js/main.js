@@ -126,3 +126,77 @@ if (alertBox) {
     setTimeout(() => alertBox.remove(), 400);
   }, 4000);
 }
+
+/* ===================== SLIDERI ===================== */
+
+(function () {
+  const root = document.getElementById("ek-slider");
+  if (!root) return;
+
+  const track = root.querySelector(".slider-track");
+  const slides = Array.from(root.querySelectorAll(".slide"));
+  const prevBtn = root.querySelector(".slider-btn.prev");
+  const nextBtn = root.querySelector(".slider-btn.next");
+  const dotsWrap = root.querySelector(".slider-dots");
+
+  let index = 0;
+  let timer = null;
+  const AUTOPLAY_MS = 4000;
+
+  slides.forEach((_, i) => {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "slider-dot" + (i === 0 ? " active" : "");
+    b.setAttribute("aria-label", "Shko te slide " + (i + 1));
+    b.addEventListener("click", () => goTo(i, true));
+    dotsWrap.appendChild(b);
+  });
+
+  const dots = Array.from(dotsWrap.querySelectorAll(".slider-dot"));
+
+  function update() {
+    track.style.transform = `translateX(-${index * 100}%)`;
+    dots.forEach((d, i) => d.classList.toggle("active", i === index));
+  }
+
+  function goTo(i, userAction = false) {
+    index = (i + slides.length) % slides.length;
+    update();
+    if (userAction) restartAutoplay();
+  }
+
+  function next() { goTo(index + 1, true); }
+  function prev() { goTo(index - 1, true); }
+
+  function startAutoplay() {
+    stopAutoplay();
+    timer = setInterval(() => goTo(index + 1, false), AUTOPLAY_MS);
+  }
+
+  function stopAutoplay() {
+    if (timer) clearInterval(timer);
+    timer = null;
+  }
+
+  function restartAutoplay() { startAutoplay(); }
+
+  nextBtn && nextBtn.addEventListener("click", next);
+  prevBtn && prevBtn.addEventListener("click", prev);
+
+  root.addEventListener("mouseenter", stopAutoplay);
+  root.addEventListener("mouseleave", startAutoplay);
+
+  let startX = 0;
+  root.addEventListener("touchstart", (e) => {
+    startX = e.touches[0].clientX;
+  }, { passive: true });
+
+  root.addEventListener("touchend", (e) => {
+    const endX = e.changedTouches[0].clientX;
+    const dx = endX - startX;
+    if (Math.abs(dx) > 45) dx < 0 ? next() : prev();
+  });
+
+  update();
+  startAutoplay();
+})();
