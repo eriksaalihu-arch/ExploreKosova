@@ -162,6 +162,8 @@ ExploreKosova/
 ├── login.php
 ├── register.php
 ├── logout.php
+├── auth_register.php
+├── auth_login.php
 ├── dashboard.php
 ├── admin_tour_form.php
 ├── admin_tour_save.php
