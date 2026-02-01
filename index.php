@@ -16,19 +16,30 @@ require_once __DIR__ . "/includes/navbar.php";
 <main class="page home-page">
 
 <?php
-  // Slider images (merren nga cards images në DB; nëse s’ka mjaft, përdor fallback)
   $slides = [];
 
-  $cards = $home['cards'] ?? [];
-  foreach ($cards as $c) {
-    if (!empty($c['image'])) $slides[] = (string)$c['image'];
+  $dbSlides = $home['slider_images'] ?? [];
+  if (is_array($dbSlides)) {
+    foreach ($dbSlides as $img) {
+      $img = trim((string)$img);
+      if ($img !== '') $slides[] = $img;
+    }
   }
 
-  // hiq dublikimet & merr max 5
-  $slides = array_values(array_unique($slides));
+  if (count($slides) < 2) {
+    $cardsFallback = $home['cards'] ?? [];
+    if (is_array($cardsFallback)) {
+      foreach ($cardsFallback as $c) {
+        if (!empty($c['image'])) {
+          $slides[] = trim((string)$c['image']);
+        }
+      }
+    }
+  }
+
+  $slides = array_values(array_unique(array_filter($slides)));
   $slides = array_slice($slides, 0, 5);
 
-  // fallback nëse s’ka mjaft foto
   if (count($slides) < 2) {
     $slides = [
       'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1600&auto=format&fit=crop&q=80',
@@ -41,15 +52,14 @@ require_once __DIR__ . "/includes/navbar.php";
   $btnLink = $home['hero_button_link'] ?? 'services.php';
 ?>
 
-  <!-- ✅ HERO SLIDER -->
   <section class="hero-slider" id="ek-hero-slider" data-autoplay="1" data-interval="5000">
     <div class="hero-slides">
       <?php foreach ($slides as $i => $img): ?>
         <div
           class="hero-slide <?= $i === 0 ? 'is-active' : '' ?>"
-          style="background-image:url('<?= e($img) ?>')"
+          style="background-image:url(&quot;<?= e((string)$img) ?>&quot;)"
           role="img"
-          aria-label="Slide <?= $i + 1 ?>"
+          aria-label="Slide <?= (int)($i + 1) ?>"
         ></div>
       <?php endforeach; ?>
     </div>
@@ -57,9 +67,9 @@ require_once __DIR__ . "/includes/navbar.php";
     <div class="hero-overlay"></div>
 
     <div class="hero-content">
-      <h1><?= e($home['hero_title'] ?? 'Zbulo Kosovën') ?></h1>
-      <p><?= e($home['hero_subtitle'] ?? 'Eksploro natyrën, qytetet dhe traditën e vendit me ture profesionale.') ?></p>
-      <a href="<?= e($btnLink) ?>" class="btn-primary"><?= e($btnText) ?></a>
+      <h1><?= e((string)($home['hero_title'] ?? 'Zbulo Kosovën')) ?></h1>
+      <p><?= e((string)($home['hero_subtitle'] ?? 'Eksploro natyrën, qytetet dhe traditën e vendit me ture profesionale.')) ?></p>
+      <a href="<?= e((string)$btnLink) ?>" class="btn-primary"><?= e((string)$btnText) ?></a>
     </div>
 
     <button class="hero-btn prev" type="button" aria-label="Mbrapa">‹</button>
@@ -68,11 +78,11 @@ require_once __DIR__ . "/includes/navbar.php";
   </section>
 
   <section class="section">
-    <h2><?= e($home['why_title'] ?? 'Pse ExploreKosova?') ?></h2>
+    <h2><?= e((string)($home['why_title'] ?? 'Pse ExploreKosova?')) ?></h2>
 
     <div class="cards">
       <?php $cards = $home['cards'] ?? []; ?>
-      <?php if (empty($cards)): ?>
+      <?php if (empty($cards) || !is_array($cards)): ?>
         <p class="error-msg">Nuk ka përmbajtje për kartat (cards) ende.</p>
       <?php else: ?>
         <?php foreach ($cards as $c): ?>
