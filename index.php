@@ -29,6 +29,42 @@ require_once __DIR__ . "/includes/navbar.php";
     </section>
 
     <section class="section">
+      <div class="slider" id="ek-slider">
+        <div class="slider-track">
+
+          <div class="slide is-active">
+            <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1600&auto=format&fit=crop&q=80" alt="Kosova nature">
+            <div class="slide-caption">
+              <h3>Zbulo natyrën</h3>
+              <p>Eksploro destinacione unike me guida profesionale.</p>
+            </div>
+          </div>
+
+          <div class="slide">
+            <img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=1600&auto=format&fit=crop&q=80" alt="Mountains">
+            <div class="slide-caption">
+              <h3>Destinacione historike</h3>
+              <p>Prishtinë, Prizren dhe më shumë.</p>
+            </div>
+          </div>
+
+          <div class="slide">
+            <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=1600&auto=format&fit=crop&q=80" alt="Travel team">
+            <div class="slide-caption">
+              <h3>Rezervo lehtë</h3>
+              <p>Kontakt i shpejtë dhe menaxhim profesional.</p>
+            </div>
+          </div>
+
+        </div>
+
+        <button class="slider-btn prev" type="button" aria-label="Mbrapa">‹</button>
+        <button class="slider-btn next" type="button" aria-label="Para">›</button>
+        <div class="slider-dots" aria-label="Slider dots"></div>
+      </div>
+    </section>
+
+    <section class="section">
         <h2><?= e($home['why_title'] ?? 'Pse ExploreKosova?') ?></h2>
 
         <div class="cards">
