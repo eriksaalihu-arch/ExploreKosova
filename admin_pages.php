@@ -90,6 +90,43 @@ require_once __DIR__ . "/includes/navbar.php";
         <input type="text" name="why_title" value="<?= e((string)($data['why_title'] ?? '')) ?>" required>
       </div>
 
+      <!-- ================= HERO SLIDER (Admin) ================= -->
+      <hr style="border:none;border-top:1px solid #eee;margin:16px 0;">
+
+      <?php
+        $slider = $data['slider'] ?? [];
+        for ($i=0; $i<3; $i++) {
+          $slider[$i] = $slider[$i] ?? ['image'=>'', 'title'=>'', 'text'=>''];
+        }
+      ?>
+
+      <h2 style="margin:0 0 10px;">Hero Slider</h2>
+      <p style="margin:0 0 14px; opacity:.75;">
+        Ndrysho fotot dhe tekstet e slider-it që shfaqet në pjesën e madhe (Hero) në Ballinë.
+      </p>
+
+      <?php for ($i=0; $i<3; $i++): ?>
+        <h3 style="margin:12px 0 6px;">Slide <?= $i+1 ?></h3>
+
+        <div>
+          <label>URL e Fotos (Slider)</label>
+          <input type="text" name="slider_image[]" value="<?= e((string)($slider[$i]['image'] ?? '')) ?>" required>
+        </div>
+
+        <div>
+          <label>Titulli (opsionale)</label>
+          <input type="text" name="slider_title[]" value="<?= e((string)($slider[$i]['title'] ?? '')) ?>">
+        </div>
+
+        <div>
+          <label>Teksti (opsionale)</label>
+          <input type="text" name="slider_text[]" value="<?= e((string)($slider[$i]['text'] ?? '')) ?>">
+        </div>
+
+        <?php if ($i < 2): ?><hr style="border:none;border-top:1px solid #eee;margin:12px 0;"><?php endif; ?>
+      <?php endfor; ?>
+
+      <!-- ================= CARDS (Why ExploreKosova) ================= -->
       <hr style="border:none;border-top:1px solid #eee;margin:16px 0;">
 
       <?php
@@ -98,6 +135,11 @@ require_once __DIR__ . "/includes/navbar.php";
           $cards[$i] = $cards[$i] ?? ['title'=>'','text'=>'','image'=>''];
         }
       ?>
+
+      <h2 style="margin:0 0 10px;">Kartat (Why Section)</h2>
+      <p style="margin:0 0 14px; opacity:.75;">
+        Këto karta shfaqen poshtë në seksionin “Pse ExploreKosova?”.
+      </p>
 
       <?php for ($i=0; $i<3; $i++): ?>
         <h3 style="margin:12px 0 6px;">Card <?= $i+1 ?></h3>
