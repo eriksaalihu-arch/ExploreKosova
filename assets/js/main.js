@@ -129,87 +129,134 @@ if (alertBox) {
 
 // ========================= Hero Slider =========================
 (function () {
-  const root = document.getElementById("ek-hero-slider");
-  if (!root) return;
-
-  const slides = Array.from(root.querySelectorAll(".hero-slide"));
-  const btnPrev = root.querySelector(".hero-btn.prev");
-  const btnNext = root.querySelector(".hero-btn.next");
-  const dotsWrap = root.querySelector(".hero-dots");
-
-  if (slides.length <= 1) return;
-
-  let index = slides.findIndex(s => s.classList.contains("is-active"));
-  if (index < 0) index = 0;
-
-  const dots = slides.map((_, i) => {
-    const d = document.createElement("button");
-    d.type = "button";
-    d.className = "hero-dot" + (i === index ? " is-active" : "");
-    d.setAttribute("aria-label", `Shko te slide ${i + 1}`);
-    d.addEventListener("click", () => goTo(i, true));
-    dotsWrap && dotsWrap.appendChild(d);
-    return d;
-  });
-
-  function render() {
-    slides.forEach((s, i) => s.classList.toggle("is-active", i === index));
-    dots.forEach((d, i) => d.classList.toggle("is-active", i === index));
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initHeroSlider);
+  } else {
+    initHeroSlider();
   }
 
-  function goTo(i, userAction = false) {
-    index = (i + slides.length) % slides.length;
+  function initHeroSlider() {
+    const root = document.getElementById("ek-hero-slider");
+    if (!root) return;
+
+    const slides = Array.from(root.querySelectorAll(".hero-slide"));
+    const btnPrev = root.querySelector(".hero-btn.prev");
+    const btnNext = root.querySelector(".hero-btn.next");
+    const dotsWrap = root.querySelector(".hero-dots");
+
+    const capWrap  = document.getElementById("ek-hero-caption");
+    const capTitle = document.getElementById("ek-hero-cap-title");
+    const capText  = document.getElementById("ek-hero-cap-text");
+
+    if (slides.length <= 1) return;
+
+    let index = slides.findIndex((s) => s.classList.contains("is-active"));
+    if (index < 0) index = 0;
+
+    let dots = [];
+    if (dotsWrap) {
+      dotsWrap.innerHTML = "";
+      dots = slides.map((_, i) => {
+        const d = document.createElement("button");
+        d.type = "button";
+        d.className = "hero-dot" + (i === index ? " is-active" : "");
+        d.setAttribute("aria-label", `Shko te slide ${i + 1}`);
+        d.addEventListener("click", () => goTo(i, true));
+        dotsWrap.appendChild(d);
+        return d;
+      });
+    }
+
+    function updateCaption(i) {
+      if (!capWrap || !capTitle || !capText) return;
+
+      const t = (slides[i].dataset.title || "").trim();
+      const p = (slides[i].dataset.text || "").trim();
+
+      if (t === "" && p === "") {
+        capWrap.style.display = "none";
+        capTitle.textContent = "";
+        capText.textContent = "";
+        return;
+      }
+
+      capWrap.style.display = "";
+      capTitle.textContent = t;
+      capText.textContent = p;
+    }
+
+    function render() {
+      slides.forEach((s, i) => s.classList.toggle("is-active", i === index));
+      dots.forEach((d, i) => d.classList.toggle("is-active", i === index));
+      updateCaption(index);
+    }
+
+    function goTo(i, userAction = false) {
+      index = (i + slides.length) % slides.length;
+      render();
+      if (userAction) restartAutoplay();
+    }
+
+    function next(userAction = false) {
+      goTo(index + 1, userAction);
+    }
+
+    function prev(userAction = false) {
+      goTo(index - 1, userAction);
+    }
+
+    btnNext && btnNext.addEventListener("click", () => next(true));
+    btnPrev && btnPrev.addEventListener("click", () => prev(true));
+
+    const autoplay = root.dataset.autoplay === "1";
+    const interval = Number(root.dataset.interval || 5000);
+    let timer = null;
+
+    function startAutoplay() {
+      if (!autoplay) return;
+      stopAutoplay();
+      timer = setInterval(() => next(false), interval);
+    }
+
+    function stopAutoplay() {
+      if (timer) clearInterval(timer);
+      timer = null;
+    }
+
+    function restartAutoplay() {
+      if (!autoplay) return;
+      startAutoplay();
+    }
+
+    root.addEventListener("mouseenter", stopAutoplay);
+    root.addEventListener("mouseleave", startAutoplay);
+
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) stopAutoplay();
+      else startAutoplay();
+    });
+
+    let startX = 0;
+    root.addEventListener(
+      "touchstart",
+      (e) => {
+        startX = e.touches[0].clientX;
+      },
+      { passive: true }
+    );
+
+    root.addEventListener(
+      "touchend",
+      (e) => {
+        const endX = e.changedTouches[0].clientX;
+        const diff = endX - startX;
+        if (Math.abs(diff) > 40) {
+          diff < 0 ? next(true) : prev(true);
+        }
+      },
+      { passive: true }
+    );
     render();
-    if (userAction) restartAutoplay();
-  }
-
-  function next(userAction = false) {
-    goTo(index + 1, userAction);
-  }
-
-  function prev(userAction = false) {
-    goTo(index - 1, userAction);
-  }
-
-  btnNext && btnNext.addEventListener("click", () => next(true));
-  btnPrev && btnPrev.addEventListener("click", () => prev(true));
-
-  const autoplay = root.dataset.autoplay === "1";
-  const interval = parseInt(root.dataset.interval || "5000", 10);
-  let timer = null;
-
-  function startAutoplay() {
-    if (!autoplay) return;
-    stopAutoplay();
-    timer = setInterval(() => next(false), interval);
-  }
-
-  function stopAutoplay() {
-    if (timer) clearInterval(timer);
-    timer = null;
-  }
-
-  function restartAutoplay() {
-    stopAutoplay();
     startAutoplay();
   }
-
-  root.addEventListener("mouseenter", stopAutoplay);
-  root.addEventListener("mouseleave", startAutoplay);
-
-  let startX = 0;
-  root.addEventListener("touchstart", (e) => {
-    startX = e.touches[0].clientX;
-  }, { passive: true });
-
-  root.addEventListener("touchend", (e) => {
-    const endX = e.changedTouches[0].clientX;
-    const diff = endX - startX;
-    if (Math.abs(diff) > 40) {
-      diff < 0 ? next(true) : prev(true);
-    }
-  }, { passive: true });
-
-  render();
-  startAutoplay();
 })();

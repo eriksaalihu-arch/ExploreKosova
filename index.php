@@ -16,13 +16,32 @@ require_once __DIR__ . "/includes/navbar.php";
 <main class="page home-page">
 
 <?php
+
   $slides = [];
 
-  $dbSlides = $home['slider_images'] ?? [];
-  if (is_array($dbSlides)) {
-    foreach ($dbSlides as $img) {
-      $img = trim((string)$img);
-      if ($img !== '') $slides[] = $img;
+  if (!empty($home['slider']) && is_array($home['slider'])) {
+    foreach ($home['slider'] as $s) {
+      if (!is_array($s)) continue;
+
+      $img = trim((string)($s['image'] ?? ''));
+      if ($img === '') continue;
+
+      $slides[] = [
+        'image' => $img,
+        'title' => trim((string)($s['title'] ?? '')),
+        'text'  => trim((string)($s['text'] ?? '')),
+      ];
+    }
+  }
+
+  if (count($slides) < 2) {
+    $dbImages = $home['slider_images'] ?? [];
+    if (is_array($dbImages)) {
+      foreach ($dbImages as $img) {
+        $img = trim((string)$img);
+        if ($img === '') continue;
+        $slides[] = ['image' => $img, 'title' => '', 'text' => ''];
+      }
     }
   }
 
@@ -30,36 +49,60 @@ require_once __DIR__ . "/includes/navbar.php";
     $cardsFallback = $home['cards'] ?? [];
     if (is_array($cardsFallback)) {
       foreach ($cardsFallback as $c) {
+        if (!is_array($c)) continue;
         $img = trim((string)($c['image'] ?? ''));
-        if ($img !== '') $slides[] = $img;
+        if ($img === '') continue;
+        $slides[] = ['image' => $img, 'title' => '', 'text' => ''];
       }
     }
   }
 
-  $slides = array_values(array_unique(array_filter($slides)));
-  $slides = array_slice($slides, 0, 5);
+  $seen = [];
+  $uniqueSlides = [];
+  foreach ($slides as $s) {
+    $key = $s['image'];
+    if (isset($seen[$key])) continue;
+    $seen[$key] = true;
+    $uniqueSlides[] = $s;
+    if (count($uniqueSlides) >= 5) break;
+  }
+  $slides = $uniqueSlides;
 
   if (count($slides) < 2) {
     $slides = [
-      'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=2000&auto=format&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=2000&auto=format&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=2000&auto=format&fit=crop&q=80',
+      [
+        'image' => 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1600&auto=format&fit=crop&q=80',
+        'title' => 'Zbulo natyrën',
+        'text'  => 'Eksploro destinacione unike me guida profesionale.',
+      ],
+      [
+        'image' => 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=1600&auto=format&fit=crop&q=80',
+        'title' => 'Destinacione historike',
+        'text'  => 'Prishtinë, Prizren dhe më shumë.',
+      ],
+      [
+        'image' => 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=1600&auto=format&fit=crop&q=80',
+        'title' => 'Rezervo lehtë',
+        'text'  => 'Kontakt i shpejtë dhe menaxhim profesional.',
+      ],
     ];
   }
 
   $btnText = (string)($home['hero_button_text'] ?? 'Shiko turet');
   $btnLink = (string)($home['hero_button_link'] ?? 'services.php');
+
+  $firstCaptionTitle = (string)($slides[0]['title'] ?? '');
+  $firstCaptionText  = (string)($slides[0]['text'] ?? '');
 ?>
 
   <section class="hero-slider" id="ek-hero-slider" data-autoplay="1" data-interval="5000">
     <div class="hero-slides">
-      <?php foreach ($slides as $i => $img): ?>
-        <?php
-          $bg = "background-image: url('" . e((string)$img) . "');";
-        ?>
+      <?php foreach ($slides as $i => $s): ?>
         <div
           class="hero-slide <?= $i === 0 ? 'is-active' : '' ?>"
-          style="<?= $bg ?>"
+          style="background-image: url('<?= e($s['image']) ?>');"
+          data-title="<?= e($s['title']) ?>"
+          data-text="<?= e($s['text']) ?>"
           role="img"
           aria-label="Slide <?= (int)($i + 1) ?>"
         ></div>
@@ -71,6 +114,12 @@ require_once __DIR__ . "/includes/navbar.php";
     <div class="hero-content">
       <h1><?= e((string)($home['hero_title'] ?? 'Zbulo Kosovën')) ?></h1>
       <p><?= e((string)($home['hero_subtitle'] ?? 'Eksploro natyrën, qytetet dhe traditën e vendit me ture profesionale.')) ?></p>
+
+      <div class="hero-slide-caption" id="ek-hero-caption" <?= ($firstCaptionTitle==='' && $firstCaptionText==='') ? 'style="display:none"' : '' ?>>
+        <h3 id="ek-hero-cap-title"><?= e($firstCaptionTitle) ?></h3>
+        <p id="ek-hero-cap-text"><?= e($firstCaptionText) ?></p>
+      </div>
+
       <a href="<?= e($btnLink) ?>" class="btn-primary"><?= e($btnText) ?></a>
     </div>
 
