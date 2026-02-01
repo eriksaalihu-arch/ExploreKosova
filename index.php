@@ -30,9 +30,8 @@ require_once __DIR__ . "/includes/navbar.php";
     $cardsFallback = $home['cards'] ?? [];
     if (is_array($cardsFallback)) {
       foreach ($cardsFallback as $c) {
-        if (!empty($c['image'])) {
-          $slides[] = trim((string)$c['image']);
-        }
+        $img = trim((string)($c['image'] ?? ''));
+        if ($img !== '') $slides[] = $img;
       }
     }
   }
@@ -42,22 +41,25 @@ require_once __DIR__ . "/includes/navbar.php";
 
   if (count($slides) < 2) {
     $slides = [
-      'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1600&auto=format&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=1600&auto=format&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=1600&auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=2000&auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=2000&auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=2000&auto=format&fit=crop&q=80',
     ];
   }
 
-  $btnText = $home['hero_button_text'] ?? 'Shiko turet';
-  $btnLink = $home['hero_button_link'] ?? 'services.php';
+  $btnText = (string)($home['hero_button_text'] ?? 'Shiko turet');
+  $btnLink = (string)($home['hero_button_link'] ?? 'services.php');
 ?>
 
   <section class="hero-slider" id="ek-hero-slider" data-autoplay="1" data-interval="5000">
     <div class="hero-slides">
       <?php foreach ($slides as $i => $img): ?>
+        <?php
+          $bg = "background-image: url('" . e((string)$img) . "');";
+        ?>
         <div
           class="hero-slide <?= $i === 0 ? 'is-active' : '' ?>"
-          style="background-image:url(&quot;<?= e((string)$img) ?>&quot;)"
+          style="<?= $bg ?>"
           role="img"
           aria-label="Slide <?= (int)($i + 1) ?>"
         ></div>
@@ -69,7 +71,7 @@ require_once __DIR__ . "/includes/navbar.php";
     <div class="hero-content">
       <h1><?= e((string)($home['hero_title'] ?? 'Zbulo Kosovën')) ?></h1>
       <p><?= e((string)($home['hero_subtitle'] ?? 'Eksploro natyrën, qytetet dhe traditën e vendit me ture profesionale.')) ?></p>
-      <a href="<?= e((string)$btnLink) ?>" class="btn-primary"><?= e((string)$btnText) ?></a>
+      <a href="<?= e($btnLink) ?>" class="btn-primary"><?= e($btnText) ?></a>
     </div>
 
     <button class="hero-btn prev" type="button" aria-label="Mbrapa">‹</button>
