@@ -943,7 +943,7 @@ main {
 @supports (aspect-ratio: 21 / 9){
   .hero-slider{
     aspect-ratio: 21 / 9;
-    height: auto; 
+    height: auto;
   }
 }
 
@@ -991,6 +991,7 @@ main {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
 
   padding: 96px 20px;
   text-align: center;
@@ -1015,6 +1016,46 @@ main {
   line-height: 1.55;
   font-size: clamp(14px, 1.55vw, 18px);
   text-shadow: 0 10px 30px rgba(0,0,0,.35);
+}
+
+.hero-slider .btn-primary{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: auto !important;
+  max-width: max-content;
+
+  padding: 12px 28px;
+  border-radius: 999px;
+
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: .2px;
+
+  text-decoration: none;
+  white-space: nowrap;
+
+  box-shadow: 0 12px 26px rgba(44,108,255,.35);
+  transition: transform .15s ease, box-shadow .15s ease, filter .15s ease;
+}
+
+.hero-slider .btn-primary:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 16px 34px rgba(44,108,255,.45);
+  filter: brightness(1.02);
+}
+
+.hero-slider .btn-primary:active{
+  transform: translateY(0);
+  box-shadow: 0 10px 22px rgba(44,108,255,.35);
+}
+
+.hero-slider .btn-primary:focus-visible{
+  outline: none;
+  box-shadow:
+    0 0 0 4px rgba(44,108,255,.35),
+    0 12px 26px rgba(44,108,255,.35);
 }
 
 .hero-btn{
@@ -1126,4 +1167,8 @@ main {
   }
   .hero-slider .hero-content{ padding: 70px 14px; }
   .hero-btn{ display: none; }
+  .hero-slider .btn-primary{
+    padding: 11px 24px;
+    font-size: 14px;
+  }
 }
