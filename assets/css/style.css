@@ -936,8 +936,15 @@ main {
   width: 100%;
   overflow: hidden;
 
-  aspect-ratio: 21 / 9;
   min-height: 460px;
+  height: clamp(380px, 55vh, 620px);
+}
+
+@supports (aspect-ratio: 21 / 9){
+  .hero-slider{
+    aspect-ratio: 21 / 9;
+    height: auto; 
+  }
 }
 
 .hero-slides{
@@ -954,8 +961,8 @@ main {
   background-repeat: no-repeat;
 
   opacity: 0;
-  transform: scale(1.03);
-  transition: opacity .65s ease, transform 1.15s ease;
+  transform: scale(1.04);
+  transition: opacity .7s ease, transform 1.4s ease;
   will-change: opacity, transform;
 }
 
@@ -969,8 +976,8 @@ main {
   inset: 0;
 
   background:
-    linear-gradient(to top, rgba(0,0,0,.62), rgba(0,0,0,.22) 55%, rgba(0,0,0,.35)),
-    rgba(0,0,0,.15);
+    radial-gradient(1200px 600px at 50% 35%, rgba(0,0,0,.18), rgba(0,0,0,.55)),
+    linear-gradient(to top, rgba(0,0,0,.65), rgba(0,0,0,.10) 55%, rgba(0,0,0,.35));
 }
 
 .hero-slider .hero-content{
@@ -985,16 +992,20 @@ main {
   flex-direction: column;
   justify-content: center;
 
-  padding: 90px 20px;
+  padding: 96px 20px;
   text-align: center;
   color: #fff;
+
+  padding-top: calc(96px + env(safe-area-inset-top, 0px));
+  padding-bottom: calc(56px + env(safe-area-inset-bottom, 0px));
 }
 
 .hero-slider .hero-content h1{
   font-size: clamp(30px, 4vw, 56px);
   font-weight: 900;
-  letter-spacing: -0.5px;
+  letter-spacing: -0.6px;
   margin: 0 0 12px;
+  text-shadow: 0 10px 30px rgba(0,0,0,.45);
 }
 
 .hero-slider .hero-content p{
@@ -1002,7 +1013,8 @@ main {
   margin: 0 auto 18px;
   opacity: .95;
   line-height: 1.55;
-  font-size: clamp(14px, 1.5vw, 18px);
+  font-size: clamp(14px, 1.55vw, 18px);
+  text-shadow: 0 10px 30px rgba(0,0,0,.35);
 }
 
 .hero-btn{
@@ -1011,14 +1023,14 @@ main {
   transform: translateY(-50%);
   z-index: 3;
 
-  width: 46px;
-  height: 46px;
+  width: 48px;
+  height: 48px;
   border-radius: 999px;
   border: 1px solid rgba(255,255,255,.25);
 
   background: rgba(0,0,0,.35);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 
   color: #fff;
   font-size: 28px;
@@ -1028,17 +1040,23 @@ main {
   display: grid;
   place-items: center;
 
-  transition: background .15s ease, transform .15s ease, opacity .15s ease;
+  transition: background .18s ease, transform .18s ease, opacity .18s ease, border-color .18s ease;
   opacity: .95;
 }
 
 .hero-btn:hover{
   background: rgba(0,0,0,.55);
-  transform: translateY(-50%) scale(1.05);
+  border-color: rgba(255,255,255,.35);
+  transform: translateY(-50%) scale(1.06);
 }
 
-.hero-btn.prev{ left: 14px; }
-.hero-btn.next{ right: 14px; }
+.hero-btn:focus-visible{
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(44,108,255,.35);
+}
+
+.hero-btn.prev{ left: 16px; }
+.hero-btn.next{ right: 16px; }
 
 .hero-dots{
   position: absolute;
@@ -1058,16 +1076,25 @@ main {
   height: 10px;
   border-radius: 999px;
   border: 1px solid rgba(255,255,255,.55);
-  background: rgba(255,255,255,.20);
+  background: rgba(255,255,255,.18);
   cursor: pointer;
 
-  transition: transform .15s ease, background .15s ease, width .15s ease;
+  transition: transform .15s ease, background .15s ease, width .15s ease, opacity .15s ease;
+  opacity: .9;
 }
+
+.hero-dot:hover{ opacity: 1; }
 
 .hero-dot.is-active{
   background: rgba(255,255,255,.95);
-  transform: scale(1.15);
+  transform: scale(1.12);
   width: 18px;
+  opacity: 1;
+}
+
+.hero-dot:focus-visible{
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(44,108,255,.35);
 }
 
 @media (prefers-reduced-motion: reduce){
@@ -1077,24 +1104,25 @@ main {
 
 @media (max-width: 992px){
   .hero-slider{
-    aspect-ratio: 16 / 9;
     min-height: 420px;
+    height: clamp(360px, 52vh, 560px);
   }
-  .hero-slider .hero-content{ padding: 80px 16px; }
+  .hero-slider .hero-content{ padding: 86px 16px; }
 }
 
 @media (max-width: 768px){
   .hero-slider{
-    aspect-ratio: 4 / 3;
     min-height: 360px;
+    height: clamp(320px, 48vh, 480px);
   }
+  .hero-slider .hero-content{ padding: 78px 14px; }
   .hero-btn{ width: 42px; height: 42px; font-size: 26px; }
 }
 
 @media (max-width: 480px){
   .hero-slider{
-    aspect-ratio: 1 / 1;
     min-height: 320px;
+    height: clamp(300px, 46vh, 420px);
   }
   .hero-slider .hero-content{ padding: 70px 14px; }
   .hero-btn{ display: none; }
