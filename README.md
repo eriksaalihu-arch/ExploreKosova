@@ -250,6 +250,9 @@ UPDATE users SET role = 'admin' WHERE email = 'email@example.com';
 - Password hashing
 - Kontroll i roleve për qasje në dashboard
 
+### 🔐 Menaxhimi i sesioneve dhe siguria: 
+- Projekti përdor PHP sessions me rregulla strikte sigurie (session regeneration, cookie invalidation dhe cache-control headers) për të parandaluar rikthimin e faqeve të mbrojtura pas logout dhe për të siguruar që përdoruesit të ridrejtohen gjithmonë në login kur sesioni përfundon.
+
 ---
 
 ## 👨‍💻 Autorët
