@@ -16,6 +16,7 @@ function requireAuth(): void
     if (session_status() === PHP_SESSION_NONE) {
         session_start();
     }
+
     preventAuthCache();
 
     if (empty($_SESSION['user'])) {

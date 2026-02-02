@@ -5,13 +5,11 @@ require_once __DIR__ . "/app/config/config.php";
 require_once __DIR__ . "/app/config/Database.php";
 require_once __DIR__ . "/app/helpers/auth.php";
 
-header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
-header("Cache-Control: post-check=0, pre-check=0", false);
-header("Pragma: no-cache");
+if (session_status() === PHP_SESSION_NONE) session_start();
+
+preventAuthCache();
 
 requireAdmin();
-
-if (session_status() === PHP_SESSION_NONE) session_start();
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header("Location: " . BASE_URL . "/dashboard.php?view=messages&err=Invalid+request");

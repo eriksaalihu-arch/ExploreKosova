@@ -279,3 +279,10 @@ if (registerForm) {
     startAutoplay();
   }
 })();
+
+// Fix: kur kthehesh me Back (bfcache), bëj reload që të kontrollohet session
+window.addEventListener("pageshow", function (event) {
+  if (event.persisted) {
+    window.location.reload();
+  }
+});

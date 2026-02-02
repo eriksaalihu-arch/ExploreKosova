@@ -5,15 +5,13 @@ require_once __DIR__ . "/app/config/config.php";
 require_once __DIR__ . "/app/config/Database.php";
 require_once __DIR__ . "/app/helpers/auth.php";
 
-header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
-header("Cache-Control: post-check=0, pre-check=0", false);
-header("Pragma: no-cache");
-
-requireAdmin();
-
 if (session_status() === PHP_SESSION_NONE) session_start();
 if (empty($_SESSION['csrf'])) $_SESSION['csrf'] = bin2hex(random_bytes(16));
 $csrf = $_SESSION['csrf'];
+
+preventAuthCache();
+
+requireAdmin();
 
 function e(string $v): string { return htmlspecialchars($v, ENT_QUOTES, 'UTF-8'); }
 

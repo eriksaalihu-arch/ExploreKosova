@@ -9,7 +9,6 @@ if (session_status() === PHP_SESSION_NONE) {
 
 if (!headers_sent()) {
     header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
-    header("Cache-Control: post-check=0, pre-check=0", false);
     header("Pragma: no-cache");
     header("Expires: 0");
 }
@@ -30,6 +29,9 @@ if (ini_get("session.use_cookies")) {
 }
 
 session_destroy();
+
+session_start();
+session_regenerate_id(true);
 
 header("Location: " . BASE_URL . "/login.php");
 exit;
