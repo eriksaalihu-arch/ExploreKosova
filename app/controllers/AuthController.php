@@ -71,7 +71,6 @@ class AuthController
             session_start();
         }
 
-        // 🔐 SHUMË E RËNDËSISHME
         session_regenerate_id(true);
 
         $_SESSION['user'] = [
