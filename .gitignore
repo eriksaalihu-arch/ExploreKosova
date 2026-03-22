@@ -1,1 +1,31 @@
+# ─── Mjedisi & Konfigurimi ───────────────────────
+app/config/config.php 
+.env
+*.env
+
+# ─── Skedaret e ngarkuar nga perdoruesit ────────
+uploads/images/*
+uploads/pdfs/*
+!uploads/images/.gitkeep
+!uploads/pdfs/.gitkeep
+
+# ─── Databaza ───────────────────────────────────
+*.sql
+*.sqlite
+*.db
+
+# ─── XAMPP / Serveri lokal ──────────────────────
 .DS_Store
+Thumbs.db
+desktop.ini
+
+# ─── Logjet & gabimet e PHP ─────────────────────
+*.log
+error_log
+php_errors.log
+
+# ─── IDE & Editor ───────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
